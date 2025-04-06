@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SolidariData</title>
+    <link rel="stylesheet" href="{% static 'landing_page/landing_page.css' %}">
+</head>
+<body>
+    <header class="hero">
+        <div class="container">
+            <h1>Bem-vindo ao SolidariData</h1>
+            <p>Uma plataforma inovadora para gerenciar dados de famílias e eventos beneficentes.</p>
+            <a href="{% url 'home' %}" class="access-button">Acesso ao sistema</a>
+        </div>
+    </header>
+    <main>
+        <section id="features" class="features">
+            <div class="container">
+                <h2>Nossos Recursos</h2>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <h3>Gerenciar Famílias</h3>
+                        <p>Registre e organize dados de famílias com eficiência.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h3>Acompanhamento de Eventos</h3>
+                        <p>Agende e acompanhe eventos beneficentes.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h3>Coordenação de Instituições</h3>
+                        <p>Conecte instituições a famílias de forma simples.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="contact" class="contact">
+            <div class="container">
+                <h2>Fale Conosco</h2>
+                <p>Entre em contato para saber mais sobre SolidariData!</p>
+                <a href="mailto:solidaridata@dirceuinformatica.com.br" class="contact-button">Envie-nos um E-mail</a>
+            </div>
+        </section>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 SolidariData. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>

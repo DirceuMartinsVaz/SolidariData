@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{% static 'sdata/styles.css' %}">
+        <title>{% block title %}SolidariData{% endblock %}</title>
+    </head>
+    <body>
+        <div class="topnav">
+            <a href="{% url 'home' %}" class="active">TELA INICIAL</a>
+            <a href="{% url 'families' %}">FAMÍLIAS</a>
+            <a href="{% url 'events' %}">EVENTOS</a>
+            <a href="{% url 'institutions' %}">INSTITUIÇÕES</a>
+        </div>
+        {% block content %}
+        {% endblock %}
+    </body>
