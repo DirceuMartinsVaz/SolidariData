@@ -1,0 +1,30 @@
+{% extends "sdata/base.html" %}
+{% block content %}
+
+<h1>Lista de Famílias Cadastradas</h1>
+<a href="{% url 'family_create' %}">Cadastrar nova família</a>
+<table>
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Nome do representante</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for family in families %}
+        <tr>
+            <td>{{ family.family_id }}</td>
+            <td>{{ family.family_representative_name }}</td>
+            <td>
+                <a href="{% url 'family_detail' family.pk %}">Ver</a>
+                <a href="{% url 'family_update' family.pk %}">Editar</a>
+                <a href="{% url 'family_delete' family.pk %}">Remover</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+{% endblock %}

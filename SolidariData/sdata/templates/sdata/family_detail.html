@@ -1,0 +1,32 @@
+{% extends "sdata/base.html" %}
+{% block content %}
+
+<h1>Detalhes da família</h1>
+<p><strong>Código:</strong> {{ family.family_id }}</p>
+<p><strong>Nome do representante:</strong> {{ family.family_representative_name }}</p>
+<p><strong>Data de Nascimento:</strong> {{ family.family_representative_birthdate }}</p>
+<p><strong>CPF:</strong> {{ family.family_representative_id }}</p>
+<p><strong>Rua:</strong> {{ family.family_address_street }}</p>
+<p><strong>Número:</strong> {{ family.family_address_number }}</p>
+<p><strong>Bairro:</strong> {{ family.family_address_neighborhood }}</p>
+<p><strong>Cidade:</strong> {{ family.family_address_city }}</p>
+<p><strong>Estado:</strong> {{ family.get_family_address_state_display }}</p>
+<p><strong>CEP:</strong> {{ family.family_address_zipcode }}</p>
+<p><strong>Complemento:</strong> {{ family.family_address_complement }}</p>
+<p><strong>Telefone:</strong> {{ family.family_phone }}</p>
+<p><strong>Anotações:</strong> {{ family.family_note }}</p>
+<p><strong>Criado em:</strong> {{ family.family_created }}</p>
+<p><strong>Atualizado em:</strong> {{ family.family_updated }}</p>
+
+<h2>Familiares</h2>
+<ul>
+    {% for relative in family.relatives.all %}
+        <li>{{ relative.relative_name }} - Data de nascimento: {{ relative.relative_birthdate }} - Grau de parentesco: {{ relative.relative_relationship }}</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'family_list' %}">Back to List</a>
+<a href="{% url 'family_update' family.pk %}">Edit</a>
+<a href="{% url 'family_delete' family.pk %}">Delete</a>
+
+{% endblock %}

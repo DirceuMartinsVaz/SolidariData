@@ -1,0 +1,44 @@
+{% extends "sdata/base.html" %}
+{% block content %}
+
+<h1>{{ form.instance.pk|default:"Cadastrar nova família" }}</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ family_form.as_p }}
+    
+    <h2>Familiares</h2>
+    {{ relative_formset.management_form }}
+    <div id="relatives-container">
+        {% for form in relative_formset %}
+            <div class="relative-form">
+                {{ form.as_p }}
+            </div>
+        {% endfor %}
+    </div>
+    <button type="button" id="add-relative">Adicionar outro familiar</button>
+    <button type="submit">Gravar alterações</button>
+</form>
+<a href="{% url 'family_list' %}">Voltar para a lista de famílias cadastradas</a>
+
+<!-- JavaScript Section -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const relativesContainer = document.getElementById('relatives-container');
+        const addRelativeButton = document.getElementById('add-relative');
+        const totalFormsInput = document.querySelector('#id_relatives-TOTAL_FORMS');
+
+        addRelativeButton.addEventListener('click', function () {
+            const totalForms = parseInt(totalFormsInput.value);
+            const newForm = relativesContainer.querySelector('.relative-form').cloneNode(true);
+
+            newForm.innerHTML = newForm.innerHTML.replace(/-0-/g, `-${totalForms}-`);
+            newForm.innerHTML = newForm.innerHTML.replace(/_0_/g, `_${totalForms}_`);
+
+            newForm.querySelectorAll('input').forEach(input => input.value = '');
+            relativesContainer.appendChild(newForm);
+            totalFormsInput.value = totalForms + 1;
+        });
+    });
+</script>
+
+{% endblock %}
