@@ -2,43 +2,147 @@
 {% block content %}
 
 <h1>{{ form.instance.pk|default:"Cadastrar nova família" }}</h1>
-<form method="post">
+<form method="post" class="form-container">
     {% csrf_token %}
-    {{ family_form.as_p }}
     
-    <h2>Familiares</h2>
-    {{ relative_formset.management_form }}
-    <div id="relatives-container">
-        {% for form in relative_formset %}
-            <div class="relative-form">
-                {{ form.as_p }}
+    <!-- Family Form -->
+    <fieldset>
+        <legend>Detalhes da Família</legend>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="family_representative_name">Nome do representante:</label>
+                {{ family_form.family_representative_name }}
             </div>
-        {% endfor %}
+            <div class="form-group">
+                <label for="family_representative_birthdate">Data de nascimento:</label>
+                {{ family_form.family_representative_birthdate }}
+            </div>
+            <div class="form-group">
+                <label for="family_representative_id">CPF:</label>
+                {{ family_form.family_representative_id }}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="family_address_street">Rua:</label>
+                {{ family_form.family_address_street }}
+            </div>
+            <div class="form-group">
+                <label for="family_address_number">Número:</label>
+                {{ family_form.family_address_number }}
+            </div>
+            <div class="form-group">
+                <label for="family_address_neighborhood">Bairro:</label>
+                {{ family_form.family_address_neighborhood }}
+            </div>
+            <div class="form-group">
+                <label for="family_address_city">Cidade:</label>
+                {{ family_form.family_address_city }}
+            </div>
+        </div>
+        <div class="form-row">            
+            <div class="form-group">
+                <label for="family_address_state">Estado:</label>
+                {{ family_form.family_address_state }}
+            </div>
+            <div class="form-group">
+                <label for="family_address_zipcode">CEP:</label>
+                {{ family_form.family_address_zipcode }}
+            </div>
+            <div class="form-group">
+                <label for="family_address_complement">Complemento:</label>
+                {{ family_form.family_address_complement }}
+            </div>
+            <div class="form-group">
+                <label for="family_phone">Telefone:</label>
+                {{ family_form.family_phone }}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="family_note">Observações:</label>
+                {{ family_form.family_note }}
+            </div>
+        </div>
+    </fieldset>
+
+    <!-- Relatives Formset -->
+    <fieldset>
+        <legend>Familiares</legend>
+        {{ relative_formset.management_form }}
+        <div id="relatives-container">
+            {% for form in relative_formset %}
+            <div class="form-row relative-form {% if forloop.counter > relative_formset.initial_forms|length %}hidden-form{% endif %}">
+                        {{ form.relative_id }} <!-- Added due a bug -->
+                    <div class="form-group">
+                        <label for="relative_name">Nome do familiar:</label>
+                        {{ form.relative_name }}
+                    </div>
+                    <div class="form-group">
+                        <label for="relative_birthdate">Data de nascimento:</label>
+                        {{ form.relative_birthdate }}
+                    </div>
+                    <div class="form-group">
+                        <label for="relative_relationship">Grau de parentesco:</label>
+                        {{ form.relative_relationship }}
+                    </div>
+                    <div class="form-group">
+                        <label for="DELETE">Remover este familiar:</label>
+                        {{ form.DELETE }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <button type="button" id="add-relative" class="btn-secondary">Adicionar familiar</button>
+    </fieldset>
+
+    <!-- Submit Button -->
+    <div class="form-actions">
+        <button type="submit" class="btn-primary">Gravar alterações</button>
     </div>
-    <button type="button" id="add-relative">Adicionar outro familiar</button>
-    <button type="submit">Gravar alterações</button>
 </form>
-<a href="{% url 'family_list' %}">Voltar para a lista de famílias cadastradas</a>
+
+<a href="{% url 'family_list' %}" class="back-link">Voltar para a lista de famílias cadastradas</a>
+
 
 <!-- JavaScript Section -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const relativesContainer = document.getElementById('relatives-container');
-        const addRelativeButton = document.getElementById('add-relative');
-        const totalFormsInput = document.querySelector('#id_relatives-TOTAL_FORMS');
+    const relativesContainer = document.getElementById('relatives-container');
+    const addRelativeButton = document.getElementById('add-relative');
+    const totalFormsInput = document.querySelector('#id_relatives-TOTAL_FORMS');
 
-        addRelativeButton.addEventListener('click', function () {
-            const totalForms = parseInt(totalFormsInput.value);
+    addRelativeButton.addEventListener('click', function () {
+        const totalForms = parseInt(totalFormsInput.value);
+        let hiddenForm = relativesContainer.querySelector('.hidden-form');
+
+        if (hiddenForm) {
+            // Reveal the hidden form
+            hiddenForm.classList.remove('hidden-form');
+        } else {
+            // Clone a form and add to the container
             const newForm = relativesContainer.querySelector('.relative-form').cloneNode(true);
 
-            newForm.innerHTML = newForm.innerHTML.replace(/-0-/g, `-${totalForms}-`);
-            newForm.innerHTML = newForm.innerHTML.replace(/_0_/g, `_${totalForms}_`);
+            // Update the form index in the new form
+            newForm.innerHTML = newForm.innerHTML.replace(/-\d+-/g, `-${totalForms}-`);
+            newForm.innerHTML = newForm.innerHTML.replace(/_\d+_/g, `_${totalForms}_`);
 
-            newForm.querySelectorAll('input').forEach(input => input.value = '');
+            // Clear the values in the new form inputs
+            newForm.querySelectorAll('input, select').forEach(input => {
+                input.value = '';
+                input.id = input.id.replace(/-\d+-/, `-${totalForms}-`);
+                input.name = input.name.replace(/-\d+-/, `-${totalForms}-`);
+            });
+
             relativesContainer.appendChild(newForm);
             totalFormsInput.value = totalForms + 1;
-        });
+        }
+
+        totalFormsInput.value = parseInt(totalFormsInput.value) + 1;
     });
+});
+
 </script>
 
 {% endblock %}

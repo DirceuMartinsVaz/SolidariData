@@ -33,3 +33,93 @@ body {
   background-color: #ff7b7b;
   color: white;
 }
+
+/* ######## */
+
+/* Form Layout */
+.form-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+input {
+  width: 95%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Buttons */
+button {
+  display: inline-block;
+  padding: 10px 20px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button.btn-primary {
+  background-color: #6c63ff;
+  color: #fff;
+}
+
+button.btn-secondary {
+  background-color: #ccc;
+  color: #000;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+/* Back Link */
+.back-link {
+  display: block;
+  margin-top: 20px;
+  color: #6c63ff;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+/* Style Select Dropdowns */
+select {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 16px;
+  width: 95%;
+  box-sizing: border-box;
+  background-color: #fff; /* Match input background */
+  appearance: none; /* Removes the default dropdown arrow (optional) */
+}
+
+select:focus {
+  outline: none;
+  border-color: #6c63ff; /* Highlight border color on focus */
+}
+
+/* Align Submit Button */
+.form-actions {
+  text-align: right; /* Align content to the right */
+}
+
+button.btn-primary {
+  margin-right: 10px; /* Remove any left margin */
+}
+
+/* Hide the extra=1 fields*/
+.hidden-form {
+  display: none;
+}

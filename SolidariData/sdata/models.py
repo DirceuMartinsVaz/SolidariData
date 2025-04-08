@@ -40,6 +40,7 @@ class Relative(models.Model):
         ('esposa', 'Esposa'),
         ('outro', 'Outro')
     ]
+    relative_id = models.AutoField(primary_key=True, editable=False)
     relative_name = models.CharField(max_length=100)
     relative_birthdate = models.DateField(null=True, blank=True)
     relative_relationship = models.CharField(max_length=50, blank=True, choices=GRAU_DE_PARENTESCO)

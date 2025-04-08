@@ -48,7 +48,6 @@ class RelativeForm(forms.ModelForm):
         model = Relative
         fields = ['relative_name', 'relative_birthdate', 'relative_relationship']
         widgets = {
-            #'relative_birthdate': forms.DateInput(attrs={'type': 'date'}),
             'relative_relationship': forms.Select(attrs={'class': 'form-select'}),
         }
         labels = {'relative_name': 'Nome do familiar', 'relative_birthdate': 'Data de nascimento do familiar', 'relative_relationship': 'Grau de parentesco'}
@@ -60,4 +59,5 @@ RelativeFormSet = inlineformset_factory(
     form=RelativeForm,
     extra=1,  # Number of empty forms displayed
     can_delete=True,  # Allow users to delete relatives
+    fields=['relative_name', 'relative_birthdate', 'relative_relationship'],  # Explicitly include only valid fields
 )

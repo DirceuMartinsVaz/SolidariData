@@ -30,16 +30,6 @@ def family_list(request):
 def family_detail(request, pk):
     family = get_object_or_404(Family, pk=pk)
     return render(request, 'sdata/family_detail.html', {'family': family})
-# Create a new family
-#def family_create(request):
-#    if request.method == "POST":
-#        form = FamilyForm(request.POST)
-#        if form.is_valid():
-#            form.save()
-#            return redirect('family_list')
-#    else:
-#        form = FamilyForm()
-#    return render(request, 'sdata/family_form.html', {'form': form})
 def family_create(request):
     if request.method == "POST":
         family_form = FamilyForm(request.POST)
