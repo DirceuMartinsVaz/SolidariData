@@ -1,22 +1,81 @@
 {% extends "sdata/base.html" %}
 {% block content %}
 
-<h1>Detalhes da família</h1>
-<p><strong>Código:</strong> {{ family.family_id }}</p>
-<p><strong>Nome do representante:</strong> {{ family.family_representative_name }}</p>
-<p><strong>Data de Nascimento:</strong> {{ family.family_representative_birthdate }}</p>
-<p><strong>CPF:</strong> {{ family.family_representative_id }}</p>
-<p><strong>Rua:</strong> {{ family.family_address_street }}</p>
-<p><strong>Número:</strong> {{ family.family_address_number }}</p>
-<p><strong>Bairro:</strong> {{ family.family_address_neighborhood }}</p>
-<p><strong>Cidade:</strong> {{ family.family_address_city }}</p>
-<p><strong>Estado:</strong> {{ family.get_family_address_state_display }}</p>
-<p><strong>CEP:</strong> {{ family.family_address_zipcode }}</p>
-<p><strong>Complemento:</strong> {{ family.family_address_complement }}</p>
-<p><strong>Telefone:</strong> {{ family.family_phone }}</p>
-<p><strong>Anotações:</strong> {{ family.family_note }}</p>
+<h1>Detalhes da Família</h1>
+
+
+<fieldset>
+    <legend>Representante da Família</legend>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="family_representative_name">Nome do representante da família:</label>
+            <input type="text" id="family_representative_name" name="family_representative_name" 
+                   value="{{ family.family_representative_name }}" readonly class="form-control">
+        </div>
+        <div class="form-group-1">
+            <label for="family_representative_birthdate">Data de nascimento:</label>
+            <input type="text" id="family_representative_birthdate" name="family_representative_birthdate" 
+                   value="{{ family.family_representative_birthdate }}" readonly class="form-control">
+        </div>
+        <div class="form-group-1">
+            <label for="family_representative_id">CPF:</label>
+            <input type="text" id="family_representative_id" name="family_representative_id" 
+                   value="{{ family.family_representative_id }}" readonly class="form-control">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group-2">
+            <label for="family_address_street">Rua:</label>
+            <input type="text" id="family_address_street" name="family_address_street" 
+                   value="{{ family.family_address_street }}" readonly class="form-control">
+        </div>
+        <div class="form-group-1">
+            <label for="family_address_number">Número:</label>
+            <input type="text" id="family_address_number" name="family_address_number" 
+                   value="{{ family.family_address_number }}" readonly class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="family_address_neighborhood">Bairro:</label>
+            <input type="text" id="family_address_neighborhood" name="family_address_neighborhood" 
+                   value="{{ family.family_address_neighborhood }}" readonly class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="family_address_city">Cidade:</label>
+            <input type="text" id="family_address_city" name="family_address_city" 
+                   value="{{ family.family_address_city }}" readonly class="form-control">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group-1">
+            <label for="family_address_state">Estado:</label>
+            <input type="text" id="family_address_state" name="family_address_state" 
+                   value="{{ family.get_family_address_state_display }}" readonly class="form-control">
+        </div>
+        <div class="form-group-1">
+            <label for="family_address_zipcode">CEP:</label>
+            <input type="text" id="family_address_zipcode" name="family_address_zipcode" 
+                   value="{{ family.family_address_zipcode }}" readonly class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="family_address_complement">Complemento:</label>
+            <input type="text" id="family_address_complement" name="family_address_complement" 
+                   value="{{ family.family_address_complement }}" readonly class="form-control">
+        </div>
+        <div class="form-group-1">
+            <label for="family_phone">Telefone:</label>
+            <input type="text" id="family_phone" name="family_phone" 
+                   value="{{ family.family_phone }}" readonly class="form-control">
+        </div> 
+    </div>
+    <div class="form-group">
+        <label for="family_note">Observações:</label>
+        <textarea id="family_note" name="family_note" readonly class="form-control">{{ family.family_note }}</textarea>
+    </div>
+</fieldset>
+<!--
 <p><strong>Criado em:</strong> {{ family.family_created }}</p>
 <p><strong>Atualizado em:</strong> {{ family.family_updated }}</p>
+-->
 
 <h2>Familiares</h2>
 <ul>
@@ -24,6 +83,29 @@
         <li>{{ relative.relative_name }} - Data de nascimento: {{ relative.relative_birthdate }} - Grau de parentesco: {{ relative.relative_relationship }}</li>
     {% endfor %}
 </ul>
+
+<fieldset>
+    <legend>Sistema</legend>
+    <div class="form-row">
+        <div class="form-row">
+            <div class="form-group">
+                <label>Código:</label>
+                <input type="text" id="family_id" name="family_id" 
+                    value="{{ family.family_id }}" readonly class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Cadastrado em:</label>
+                <input type="text" id="family_created" name="family_created" 
+                    value="{{ family.family_created }}" readonly class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Modificado em:</label>
+                <input type="text" id="family_updated" name="family_updated" 
+                    value="{{ family.family_updated }}" readonly class="form-control">
+            </div>
+        </div>
+    </div>
+</fieldset>
 
 <a href="{% url 'family_list' %}">Back to List</a>
 <a href="{% url 'family_update' family.pk %}">Edit</a>

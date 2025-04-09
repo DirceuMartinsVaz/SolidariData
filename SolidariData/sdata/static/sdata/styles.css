@@ -37,20 +37,42 @@ body {
 /* ######## */
 
 /* Form Layout */
+
 .form-row {
   display: flex;
   gap: 15px;
   margin-bottom: 15px;
 }
 
-.form-group {
+.form-group{
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
+.form-group-1{
+  flex: initial;
+  display: flex;
+  flex-direction: column;
+}
+.form-group-2{
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+}
+.form-group-3{
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+}
+.form-group-4{
+  flex: 4;
+  display: flex;
+  flex-direction: column;
+}
+
 input {
-  width: 95%;
+  width: auto;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -122,4 +144,13 @@ button.btn-primary {
 /* Hide the extra=1 fields*/
 .hidden-form {
   display: none;
+}
+
+/* For the family detail template */
+.form-control {
+  border: 1px solid #ccc;
+  padding: 8px;
+  width: auto;
+  border-radius: 4px;
+  background-color: #f9f9f9;
 }

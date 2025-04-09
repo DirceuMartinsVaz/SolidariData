@@ -1,33 +1,42 @@
 {% extends "sdata/base.html" %}
 {% block content %}
 
-<h1>{{ form.instance.pk|default:"Cadastrar nova família" }}</h1>
+<h1>{{ form.instance.pk|default:"Cadastro de família" }}</h1>
 <form method="post" class="form-container">
     {% csrf_token %}
     
     <!-- Family Form -->
     <fieldset>
-        <legend>Detalhes da Família</legend>
+        <legend>Representante da Família</legend>
         <div class="form-row">
             <div class="form-group">
                 <label for="family_representative_name">Nome do representante:</label>
                 {{ family_form.family_representative_name }}
+                {% for error in family_form.family_representative_name.errors %}
+                     <span style="color: red;">{{ error }}</span>
+                {% endfor %}
             </div>
-            <div class="form-group">
+            <div class="form-group-1">
                 <label for="family_representative_birthdate">Data de nascimento:</label>
                 {{ family_form.family_representative_birthdate }}
+                {% for error in family_form.family_representative_birthdate.errors %}
+                <span style="color: red;">{{ error }}</span>
+                {% endfor %}
             </div>
-            <div class="form-group">
+            <div class="form-group-1">
                 <label for="family_representative_id">CPF:</label>
                 {{ family_form.family_representative_id }}
+                {% for error in family_form.family_representative_id.errors %}
+                    <span style="color: red;">{{ error }}</span>
+                {% endfor %}
             </div>
         </div>
         <div class="form-row">
-            <div class="form-group">
+            <div class="form-group-2">
                 <label for="family_address_street">Rua:</label>
                 {{ family_form.family_address_street }}
             </div>
-            <div class="form-group">
+            <div class="form-group-1">
                 <label for="family_address_number">Número:</label>
                 {{ family_form.family_address_number }}
             </div>
@@ -41,11 +50,11 @@
             </div>
         </div>
         <div class="form-row">            
-            <div class="form-group">
+            <div class="form-group-1">
                 <label for="family_address_state">Estado:</label>
                 {{ family_form.family_address_state }}
             </div>
-            <div class="form-group">
+            <div class="form-group-1">
                 <label for="family_address_zipcode">CEP:</label>
                 {{ family_form.family_address_zipcode }}
             </div>
@@ -53,7 +62,7 @@
                 <label for="family_address_complement">Complemento:</label>
                 {{ family_form.family_address_complement }}
             </div>
-            <div class="form-group">
+            <div class="form-group-1">
                 <label for="family_phone">Telefone:</label>
                 {{ family_form.family_phone }}
             </div>
@@ -78,15 +87,18 @@
                         <label for="relative_name">Nome do familiar:</label>
                         {{ form.relative_name }}
                     </div>
-                    <div class="form-group">
+                    <div class="form-group-1">
                         <label for="relative_birthdate">Data de nascimento:</label>
                         {{ form.relative_birthdate }}
+                        {% for error in form.relative_birthdate.errors %}
+                            <span style="color: red;">{{ error }}</span>
+                        {% endfor %}
                     </div>
-                    <div class="form-group">
+                    <div class="form-group-1">
                         <label for="relative_relationship">Grau de parentesco:</label>
                         {{ form.relative_relationship }}
                     </div>
-                    <div class="form-group">
+                    <div class="form-group-1">
                         <label for="DELETE">Remover este familiar:</label>
                         {{ form.DELETE }}
                     </div>

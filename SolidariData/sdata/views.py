@@ -11,9 +11,6 @@ def landing_page(request):
 def home(request):
     return render(request, 'sdata/home.html')
 
-#def families(request):
-#    return render(request, 'sdata/families/families.html')
-
 def events(request):
     return render(request, 'sdata/events/events.html')
 
@@ -21,7 +18,7 @@ def institutions(request):
     return render(request, 'sdata/institutions/institutions.html')
 
 
-### Families views ###
+### Family views ###
 # List all families
 def family_list(request):
     families = Family.objects.all()
@@ -30,6 +27,7 @@ def family_list(request):
 def family_detail(request, pk):
     family = get_object_or_404(Family, pk=pk)
     return render(request, 'sdata/family_detail.html', {'family': family})
+# Create a new family
 def family_create(request):
     if request.method == "POST":
         family_form = FamilyForm(request.POST)
