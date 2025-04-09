@@ -82,7 +82,7 @@ input {
 button {
   display: inline-block;
   padding: 10px 20px;
-  margin-top: 10px;
+  margin: 10px;
   border: none;
   border-radius: 4px;
   font-size: 16px;
@@ -97,6 +97,11 @@ button.btn-primary {
 button.btn-secondary {
   background-color: #ccc;
   color: #000;
+}
+
+button.btn-danger {
+  background-color: red;
+  color: #fff;
 }
 
 button:hover {
@@ -152,5 +157,30 @@ button.btn-primary {
   padding: 8px;
   width: auto;
   border-radius: 4px;
+  background-color: #f9f9f9;
+}
+
+/* Style the table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+th {
+  background-color: #6c63ff;
+  text-align: center;
+  color: white;
+}
+td {
+  background-color: #f9f9f9;
+}
+td.center {
+  text-align: center;
   background-color: #f9f9f9;
 }

@@ -8,7 +8,7 @@
     <legend>Representante da Família</legend>
     <div class="form-row">
         <div class="form-group">
-            <label for="family_representative_name">Nome do representante da família:</label>
+            <label for="family_representative_name">Nome:</label>
             <input type="text" id="family_representative_name" name="family_representative_name" 
                    value="{{ family.family_representative_name }}" readonly class="form-control">
         </div>
@@ -72,17 +72,32 @@
         <textarea id="family_note" name="family_note" readonly class="form-control">{{ family.family_note }}</textarea>
     </div>
 </fieldset>
-<!--
-<p><strong>Criado em:</strong> {{ family.family_created }}</p>
-<p><strong>Atualizado em:</strong> {{ family.family_updated }}</p>
--->
 
-<h2>Familiares</h2>
-<ul>
+<fieldset>
+    <legend>Familiares</legend>
     {% for relative in family.relatives.all %}
-        <li>{{ relative.relative_name }} - Data de nascimento: {{ relative.relative_birthdate }} - Grau de parentesco: {{ relative.relative_relationship }}</li>
+    <div class="form-row">
+        
+        <div class="form-group-2">
+            <label for="relative_name">Nome:</label>
+            <input type="text" value="{{ relative.relative_name }}" readonly class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="relative_name">Data de nascimento:</label>
+            <input type="text" value="{{ relative.relative_birthdate }}" readonly class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="relative_name">Grau de parentesco:</label>
+            <input type="text" value="{{ relative.relative_relationship }}" readonly class="form-control">
+        </div>
+        
+    </div>
     {% endfor %}
-</ul>
+</fieldset>
+
+
+
+<!-- Familiares -->
 
 <fieldset>
     <legend>Sistema</legend>
@@ -106,9 +121,19 @@
         </div>
     </div>
 </fieldset>
-
-<a href="{% url 'family_list' %}">Back to List</a>
-<a href="{% url 'family_update' family.pk %}">Edit</a>
-<a href="{% url 'family_delete' family.pk %}">Delete</a>
+<div class="form-actions">
+    <div class="button">
+        <button type="button" class="btn-secondary" onclick="window.location.href='{% url 'family_list' %}'">
+            Voltar
+        </button>
+        <button type="button" class="btn-primary" onclick="window.location.href='{% url 'family_update' family.pk %}'">
+            Editar
+        </button>
+        <button type="button" class="btn-danger" onclick="window.location.href='{% url 'family_delete' family.pk %}'">
+            Excluir
+        </button>
+        
+    </div>
+</div>
 
 {% endblock %}

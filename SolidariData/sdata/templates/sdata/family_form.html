@@ -10,7 +10,7 @@
         <legend>Representante da Família</legend>
         <div class="form-row">
             <div class="form-group">
-                <label for="family_representative_name">Nome do representante:</label>
+                <label for="family_representative_name">Nome:</label>
                 {{ family_form.family_representative_name }}
                 {% for error in family_form.family_representative_name.errors %}
                      <span style="color: red;">{{ error }}</span>
@@ -84,7 +84,7 @@
             <div class="form-row relative-form {% if forloop.counter > relative_formset.initial_forms|length %}hidden-form{% endif %}">
                         {{ form.relative_id }} <!-- Added due a bug -->
                     <div class="form-group">
-                        <label for="relative_name">Nome do familiar:</label>
+                        <label for="relative_name">Nome:</label>
                         {{ form.relative_name }}
                     </div>
                     <div class="form-group-1">
@@ -111,11 +111,16 @@
 
     <!-- Submit Button -->
     <div class="form-actions">
-        <button type="submit" class="btn-primary">Gravar alterações</button>
+        <div class="button">
+            <button type="button" class="btn-scondary" onclick="window.location.href='{% url 'family_list' %}'">
+                Voltar
+            </button>
+            <button type="submit" class="btn-primary">Gravar alterações</button>
+        </div>
     </div>
 </form>
 
-<a href="{% url 'family_list' %}" class="back-link">Voltar para a lista de famílias cadastradas</a>
+
 
 
 <!-- JavaScript Section -->

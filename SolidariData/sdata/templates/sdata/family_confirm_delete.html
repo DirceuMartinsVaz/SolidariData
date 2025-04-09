@@ -3,10 +3,13 @@
 
 <h1>Remover Família</h1>
 <p>Você tem certeza de que deseja remover a família representada por "{{ family.family_representative_name }}"?</p>
+
 <form method="post">
     {% csrf_token %}
-    <button type="submit">Sim, remover</button>
+    <button type="button" class="btn-secondary" onclick="window.location.href='{% url 'family_list' %}'">
+        Cancelar
+    </button>
+    <button class="btn-danger type="submit">Sim, remover</button>
 </form>
-<a href="{% url 'family_list' %}">Cancelar</a>
 
 {% endblock %}

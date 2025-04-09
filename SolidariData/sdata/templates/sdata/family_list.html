@@ -2,7 +2,9 @@
 {% block content %}
 
 <h1>Lista de Famílias Cadastradas</h1>
-<a href="{% url 'family_create' %}">Cadastrar nova família</a>
+<button type="button" class="btn-primary" onclick="window.location.href='{% url 'family_create' %}'">
+    Cadastrar nova família
+</button>
 <table>
     <thead>
         <tr>
@@ -14,12 +16,18 @@
     <tbody>
         {% for family in families %}
         <tr>
-            <td>{{ family.family_id }}</td>
+            <td class="center">{{ family.family_id }}</td>
             <td>{{ family.family_representative_name }}</td>
-            <td>
-                <a href="{% url 'family_detail' family.pk %}">Ver</a>
-                <a href="{% url 'family_update' family.pk %}">Editar</a>
-                <a href="{% url 'family_delete' family.pk %}">Remover</a>
+            <td class="center">
+                <button type="button" class="btn-secondary" onclick="window.location.href='{% url 'family_detail' family.pk %}'">
+                    Detalhar
+                </button>
+                <button type="button" class="btn-primary" onclick="window.location.href='{% url 'family_update' family.pk %}'">
+                    Editar
+                </button>
+                <button type="button" class="btn-danger" onclick="window.location.href='{% url 'family_delete' family.pk %}'">
+                    Excluir
+                </button>
             </td>
         </tr>
         {% endfor %}
