@@ -8,6 +8,7 @@ class FamilyForm(forms.ModelForm):
         fields = '__all__'  # Include all fields, or specify specific ones
         labels = {
             'family_representative_name': 'Nome do representante da família',
+            'fanily_representative_gender': 'Gênero do representante da família',
             'family_representative_birthdate': 'Data de nascimento do representante da família',
             'family_representative_id': 'Número de identificação do representante da família',
             'family_address_street': 'Rua',
@@ -28,6 +29,7 @@ class FamilyForm(forms.ModelForm):
             'family_address_street': forms.TextInput(attrs={'placeholder': 'Rua, Avenida, etc.'}),
             'family_address_zipcode': forms.TextInput(attrs={'placeholder': 'XXXXX-XXX'}),
             'family_phone': forms.TextInput(attrs={'placeholder': '(XX) XXXXX-XXXX'}),
+            'family_note': forms.Textarea(attrs={'rows': 3}),
         }
         error_messages = {
             'family_representative_name': {
@@ -57,12 +59,12 @@ class FamilyForm(forms.ModelForm):
 class RelativeForm(forms.ModelForm):
     class Meta:
         model = Relative
-        fields = ['relative_name', 'relative_birthdate', 'relative_relationship']
+        fields = ['relative_name', 'relative_gender', 'relative_birthdate', 'relative_relationship']
         widgets = {
             'relative_birthdate': forms.DateInput(attrs={'placeholder': 'DD/MM/AAAA'}),
             'relative_relationship': forms.Select(attrs={'class': 'form-select'}),
         }
-        labels = {'relative_name': 'Nome do familiar', 'relative_birthdate': 'Data de nascimento do familiar', 'relative_relationship': 'Grau de parentesco'}
+        labels = {'relative_name': 'Nome do familiar', 'relative_gender': 'Gênero', 'relative_birthdate': 'Data de nascimento do familiar', 'relative_relationship': 'Grau de parentesco'}
         error_messages = {
             'relative_name': {
                 'max_length': "O nome do familiar é muito longo.",
@@ -80,5 +82,4 @@ RelativeFormSet = inlineformset_factory(
     form=RelativeForm,
     extra=1,  # Number of empty forms displayed
     can_delete=True,  # Allow users to delete relatives
-    fields=['relative_name', 'relative_birthdate', 'relative_relationship'],  # Explicitly include only valid fields
 )

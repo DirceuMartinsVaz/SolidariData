@@ -8,12 +8,19 @@
         <title>{% block title %}SolidariData{% endblock %}</title>
     </head>
     <body>
-        <div class="topnav">
+        <!--<div class="topnav">
             <a href="{% url 'home' %}" class="active">TELA INICIAL</a>
             <a href="{% url 'family_list' %}">FAMÍLIAS</a>
             <a href="{% url 'events' %}">EVENTOS</a>
             <a href="{% url 'institutions' %}">INSTITUIÇÕES</a>
-        </div>
+        </div>-->
+        <div class="topnav">
+    <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">TELA INICIAL</a>
+    <a href="{% url 'family_list' %}" class="{% if request.resolver_match.url_name == 'family_list' or request.resolver_match.url_name == 'family_create' or request.resolver_match.url_name == 'family_update' or request.resolver_match.url_name == 'family_detail' or request.resolver_match.url_name == 'family_delete'  %}active{% endif %}">FAMÍLIAS</a>
+    <a href="{% url 'events' %}" class="{% if request.resolver_match.url_name == 'events' %}active{% endif %}">EVENTOS</a>
+    <a href="{% url 'institutions' %}" class="{% if request.resolver_match.url_name == 'institutions' %}active{% endif %}">INSTITUIÇÕES</a>
+</div>
+
         {% block content %}
         {% endblock %}
     </body>

@@ -17,6 +17,13 @@
                 {% endfor %}
             </div>
             <div class="form-group-1">
+                <label for="family_representative_gender">Gênero:</label>
+                {{ family_form.family_representative_gender }}
+                {% for error in family_form.family_representative_gender.errors %}
+                    <span style="color: red;">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div class="form-group-1">
                 <label for="family_representative_birthdate">Data de nascimento:</label>
                 {{ family_form.family_representative_birthdate }}
                 {% for error in family_form.family_representative_birthdate.errors %}
@@ -88,6 +95,13 @@
                         {{ form.relative_name }}
                     </div>
                     <div class="form-group-1">
+                        <label for="relative_gender">Gênero:</label>
+                        {{ form.relative_gender }}
+                        {% for error in form.relative_gender.errors %}
+                            <span style="color: red;">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="form-group-1">
                         <label for="relative_birthdate">Data de nascimento:</label>
                         {{ form.relative_birthdate }}
                         {% for error in form.relative_birthdate.errors %}
@@ -105,25 +119,20 @@
                 </div>
             {% endfor %}
         </div>
-        
         <button type="button" id="add-relative" class="btn-secondary">Adicionar familiar</button>
     </fieldset>
 
-    <!-- Submit Button -->
+    <!-- Buttons -->
     <div class="form-actions">
         <div class="button">
-            <button type="button" class="btn-scondary" onclick="window.location.href='{% url 'family_list' %}'">
-                Voltar
-            </button>
+            <button type="button" class="btn-secondary" onclick="window.location.href='{% url 'family_list' %}'">Voltar</button>
             <button type="submit" class="btn-primary">Gravar alterações</button>
         </div>
     </div>
 </form>
 
-
-
-
 <!-- JavaScript Section -->
+ <!-- This script handles the addition of new relative forms dynamically -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
     const relativesContainer = document.getElementById('relatives-container');

@@ -10,6 +10,7 @@ class Family(models.Model):
     ]
     family_id = models.AutoField(primary_key=True)
     family_representative_name = models.CharField(max_length=100, db_index=True)
+    family_representative_gender = models.CharField(max_length=10, choices=[('masculino', 'Masculino'), ('feminino', 'Feminino'), ('outro', 'Outro')], blank=True)
     family_representative_birthdate = models.DateField(null=True, blank=True)
     family_representative_id = models.CharField(max_length=14, unique=True)
     family_address_street = models.CharField(max_length=65)
@@ -32,16 +33,16 @@ class Relative(models.Model):
     GRAU_DE_PARENTESCO = [
         ('pai', 'Pai'),
         ('mae', 'Mãe'),
-        ('irmao', 'Irmão'),
-        ('irma', 'Irmã'),
-        ('filho', 'Filho'),
-        ('filha', 'Filha'),
-        ('esposo', 'Esposo'),
-        ('esposa', 'Esposa'),
+        ('irmao/irmã', 'Irmão/Irmã'),
+        ('filho/filha', 'Filho/Filha'),
+        ('cônjuge', 'Cônjuge'),
+        ('avô/avó', 'Avô/Avó'),
+        ('neto/neta', 'Neto/Neta'),
         ('outro', 'Outro')
     ]
     relative_id = models.AutoField(primary_key=True, editable=False)
     relative_name = models.CharField(max_length=100)
+    relative_gender = models.CharField(max_length=10, choices=[('masculino', 'Masculino'), ('feminino', 'Feminino'), ('outro', 'Outro')], blank=True)
     relative_birthdate = models.DateField(null=True, blank=True)
     relative_relationship = models.CharField(max_length=50, blank=True, choices=GRAU_DE_PARENTESCO)
     relative_family = models.ForeignKey(Family, on_delete=models.CASCADE, related_name="relatives")

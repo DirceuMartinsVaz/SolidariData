@@ -3,7 +3,7 @@
 
 <h1>Detalhes da Família</h1>
 
-
+<!-- Family Form -->
 <fieldset>
     <legend>Representante da Família</legend>
     <div class="form-row">
@@ -11,6 +11,11 @@
             <label for="family_representative_name">Nome:</label>
             <input type="text" id="family_representative_name" name="family_representative_name" 
                    value="{{ family.family_representative_name }}" readonly class="form-control">
+        </div>
+        <div class="form-group-1">
+            <label for="family_representative_gender">Gênero:</label>
+            <input type="text" id="family_representative_gender" name="family_representative_gender" 
+                   value="{{ family.family_representative_gender }}" readonly class="form-control">
         </div>
         <div class="form-group-1">
             <label for="family_representative_birthdate">Data de nascimento:</label>
@@ -73,32 +78,35 @@
     </div>
 </fieldset>
 
+<!-- Family members -->
 <fieldset>
     <legend>Familiares</legend>
     {% for relative in family.relatives.all %}
     <div class="form-row">
-        
-        <div class="form-group-2">
+        <div class="form-group">
             <label for="relative_name">Nome:</label>
             <input type="text" value="{{ relative.relative_name }}" readonly class="form-control">
         </div>
-        <div class="form-group">
+        <div class="form-group-1">
+            <label for="relative_gender">Gênero:</label>
+            <input type="text" id="relative_gender" name="relative_gender" 
+                   value="{{ relative.relative_gender }}" readonly class="form-control">
+        </div>
+        <div class="form-group-1">
             <label for="relative_name">Data de nascimento:</label>
             <input type="text" value="{{ relative.relative_birthdate }}" readonly class="form-control">
         </div>
-        <div class="form-group">
+        <div class="form-group-1">
             <label for="relative_name">Grau de parentesco:</label>
             <input type="text" value="{{ relative.relative_relationship }}" readonly class="form-control">
         </div>
-        
     </div>
+    {% empty %}
+    <p style="color: gray;">Nenhum familiar cadastrado.</p>
     {% endfor %}
 </fieldset>
 
-
-
-<!-- Familiares -->
-
+<!-- Additional Data -->
 <fieldset>
     <legend>Sistema</legend>
     <div class="form-row">
@@ -121,6 +129,8 @@
         </div>
     </div>
 </fieldset>
+
+<!-- Form actions -->
 <div class="form-actions">
     <div class="button">
         <button type="button" class="btn-secondary" onclick="window.location.href='{% url 'family_list' %}'">

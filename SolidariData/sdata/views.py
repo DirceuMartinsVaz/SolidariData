@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Family
@@ -21,8 +22,19 @@ def institutions(request):
 ### Family views ###
 # List all families
 def family_list(request):
-    families = Family.objects.all()
-    return render(request, 'sdata/family_list.html', {'families': families})
+    # Retrieve ordering and pagination size from query parameters
+    order_by = request.GET.get('order_by', 'family_representative_name')  # Default ordering
+    per_page = request.GET.get('per_page', '10')  # Default page size is 10
+
+    families = Family.objects.all().order_by(order_by)
+
+    # Paginate the families based on the selected page size
+    paginator = Paginator(families, int(per_page))
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'sdata/family_list.html', {'page_obj': page_obj, 'order_by': order_by, 'per_page': per_page})
+
 # View details of a specific family
 def family_detail(request, pk):
     family = get_object_or_404(Family, pk=pk)
