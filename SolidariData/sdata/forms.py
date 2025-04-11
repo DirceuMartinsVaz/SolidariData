@@ -59,12 +59,13 @@ class FamilyForm(forms.ModelForm):
 class RelativeForm(forms.ModelForm):
     class Meta:
         model = Relative
-        fields = ['relative_name', 'relative_gender', 'relative_birthdate', 'relative_relationship']
+        fields = ['relative_name', 'relative_gender', 'relative_birthdate', 'relative_relationship', 'relative_phone']
         widgets = {
             'relative_birthdate': forms.DateInput(attrs={'placeholder': 'DD/MM/AAAA'}),
             'relative_relationship': forms.Select(attrs={'class': 'form-select'}),
+            'relative_phone': forms.TextInput(attrs={'placeholder': '(XX) XXXXX-XXXX'}),
         }
-        labels = {'relative_name': 'Nome do familiar', 'relative_gender': 'Gênero', 'relative_birthdate': 'Data de nascimento do familiar', 'relative_relationship': 'Grau de parentesco'}
+        labels = {'relative_name': 'Nome do familiar', 'relative_gender': 'Gênero', 'relative_birthdate': 'Data de nascimento do familiar', 'relative_relationship': 'Grau de parentesco', 'relative_phone': 'Telefone'}
         error_messages = {
             'relative_name': {
                 'max_length': "O nome do familiar é muito longo.",

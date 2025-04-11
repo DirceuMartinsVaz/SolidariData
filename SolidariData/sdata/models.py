@@ -46,6 +46,7 @@ class Relative(models.Model):
     relative_birthdate = models.DateField(null=True, blank=True)
     relative_relationship = models.CharField(max_length=50, blank=True, choices=GRAU_DE_PARENTESCO)
     relative_family = models.ForeignKey(Family, on_delete=models.CASCADE, related_name="relatives")
+    relative_phone = models.CharField(max_length=15, blank=True)
 
     def __str__(self):
         return self.relative_name

@@ -23,6 +23,12 @@ body {
   transition: 0.5s;
 }
 
+main {
+  padding: 10px;
+  background-color: #f4f4f4;
+  min-height: calc(100vh - 60px); /* Adjust for header height */
+}
+
 /* Add an active class to highlight the current page */
 .topnav a.active {
   background-color: #ff7b7b;
@@ -73,6 +79,7 @@ body {
   flex-direction: column;
 }
 
+
 input {
   width: auto;
   padding: 5px;
@@ -83,8 +90,8 @@ input {
 /* Buttons */
 button {
   display: inline-block;
-  padding: 10px 20px;
-  margin: 5px;
+  padding: 10px 10px;
+  margin: 5px 5px;
   border: none;
   border-radius: 4px;
   font-size: 14px;
@@ -135,9 +142,6 @@ select:focus {
   text-align: right; /* Align content to the right */
 }
 
-button.btn-primary {
-  margin-right: 10px; /* Remove any left margin */
-}
 
 /* Hide the extra=1 fields*/
 .hidden-form {
@@ -157,24 +161,50 @@ button.btn-primary {
 table {
   width: 100%;
   border-collapse: collapse;
-  margin: 20px 0;
+  margin: 0px 0;
+  table-layout: auto;
+  border-collapse: collapse;
+  
 }
 
 th, td {
-  padding: 12px;
+  padding: 10px;
   text-align: left;
   border-bottom: 1px solid #ddd;
+  margin: 0px;
+  width: min-content;
 }
 th {
   background-color: #6c63ff;
-  text-align: center;
+  text-align: left;
   color: white;
 }
-td {
-  background-color: #f9f9f9;
-}
-td.center {
+
+/* Set minimum width for the "Código" column */
+th:first-child, td:first-child { /* Select the first column */
+  width: 80px; /* Adjust the width as necessary */
   text-align: center;
+}
+
+th:nth-child(2), td:nth-child(2) { /* Select the first column */
+  margin-right:auto;
+  width:max-content;
+}
+
+/* Set minimum width for the "Ações" column */
+th:last-child, td:last-child { /* Select the last column */
+  width: 250px; /* Adjust the width as necessary */
+  
+}
+
+td {
+  
+  
+  padding: 0px 10px;
+
+}
+
+tbody > tr:nth-of-type(even) {
   background-color: #f9f9f9;
 }
 
@@ -210,4 +240,21 @@ td.center {
   font-weight: bold;
   color: white;
   text-decoration: underline;
+}
+.list-view-functions {
+  display: flex;
+  flex-wrap: wrap; /* Wrap items if space runs out */
+  gap: 15px; /* Space between all child divs */
+  margin-bottom: 10px;
+  background-color: #f8f8f8;
+  padding: 15px;
+  border-radius: 8px; /* Optional: Rounded edges */
+  border: 1px solid #ddd;
+}
+
+.list-view-functions > div:nth-child(1){
+  margin-left: 0;
+}
+.list-view-functions > div:nth-child(2) {
+  margin-right: auto;
 }

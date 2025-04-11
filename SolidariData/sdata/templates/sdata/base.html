@@ -19,8 +19,13 @@
     <a href="{% url 'family_list' %}" class="{% if request.resolver_match.url_name == 'family_list' or request.resolver_match.url_name == 'family_create' or request.resolver_match.url_name == 'family_update' or request.resolver_match.url_name == 'family_detail' or request.resolver_match.url_name == 'family_delete'  %}active{% endif %}">FAMÍLIAS</a>
     <a href="{% url 'events' %}" class="{% if request.resolver_match.url_name == 'events' %}active{% endif %}">EVENTOS</a>
     <a href="{% url 'institutions' %}" class="{% if request.resolver_match.url_name == 'institutions' %}active{% endif %}">INSTITUIÇÕES</a>
-</div>
-
-        {% block content %}
-        {% endblock %}
+        </div>
+        <main>
+            <div class="container">
+                <div class="content">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+            </div>
+        </main>
     </body>

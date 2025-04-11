@@ -65,6 +65,7 @@ def seed_data(num_families=100):
                 relative_gender=random.choice(genders),
                 relative_birthdate=random_date(1980, 2015),
                 relative_relationship=random.choice(relationships),
+                relative_phone=f"{random.randint(10, 99)}{random.randint(900000000, 999999999)}",
                 relative_family=family
             )
             relative.save()

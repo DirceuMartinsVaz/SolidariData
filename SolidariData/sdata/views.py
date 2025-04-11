@@ -1,9 +1,17 @@
 from django.core.paginator import Paginator
+from django.db.models import Q  # For complex queries
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Family
 from .forms import FamilyForm, RelativeFormSet
+import unicodedata # For accent removal
 
+# Ignore accents in search queries
+def remove_accents(input_str):
+    return ''.join(
+        c for c in unicodedata.normalize('NFD', input_str)
+        if unicodedata.category(c) != 'Mn'
+    )
 
 # Create your views here.
 def landing_page(request):
@@ -23,17 +31,29 @@ def institutions(request):
 # List all families
 def family_list(request):
     # Retrieve ordering and pagination size from query parameters
+    search_query = request.GET.get('search', '').lower()  # Convert to lowercase
+    search_query_normalized = remove_accents(search_query)  # Normalize the search term
     order_by = request.GET.get('order_by', 'family_representative_name')  # Default ordering
     per_page = request.GET.get('per_page', '10')  # Default page size is 10
 
-    families = Family.objects.all().order_by(order_by)
+       # Filter families based on the normalized search term
+    families = [f for f in Family.objects.all().order_by(order_by) if
+                remove_accents(f.family_representative_name.lower()).find(search_query_normalized) != -1
+                ]
+
+    #families = Family.objects.all().order_by(order_by)
 
     # Paginate the families based on the selected page size
     paginator = Paginator(families, int(per_page))
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'sdata/family_list.html', {'page_obj': page_obj, 'order_by': order_by, 'per_page': per_page})
+    return render(request, 'sdata/family_list.html', {
+        'page_obj': page_obj, 
+        'order_by': order_by, 
+        'per_page': per_page,
+        'search_query': search_query,
+        })
 
 # View details of a specific family
 def family_detail(request, pk):
