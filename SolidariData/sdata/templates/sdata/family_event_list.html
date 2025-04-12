@@ -1,0 +1,7 @@
+<h1>Institution Events</h1>
+<a href="{% url 'institution_event_create' %}">Create New Institution Event</a>
+<ul>
+    {% for event in institution_events %}
+        <li>{{ event.institution_event_institution }} - {{ event.institution_event_event }}</li>
+    {% endfor %}
+</ul>

@@ -8,24 +8,31 @@
         <title>{% block title %}SolidariData{% endblock %}</title>
     </head>
     <body>
-        <!--<div class="topnav">
-            <a href="{% url 'home' %}" class="active">TELA INICIAL</a>
-            <a href="{% url 'family_list' %}">FAMÍLIAS</a>
-            <a href="{% url 'events' %}">EVENTOS</a>
-            <a href="{% url 'institutions' %}">INSTITUIÇÕES</a>
-        </div>-->
-        <div class="topnav">
-    <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">TELA INICIAL</a>
-    <a href="{% url 'family_list' %}" class="{% if request.resolver_match.url_name == 'family_list' or request.resolver_match.url_name == 'family_create' or request.resolver_match.url_name == 'family_update' or request.resolver_match.url_name == 'family_detail' or request.resolver_match.url_name == 'family_delete'  %}active{% endif %}">FAMÍLIAS</a>
-    <a href="{% url 'events' %}" class="{% if request.resolver_match.url_name == 'events' %}active{% endif %}">EVENTOS</a>
-    <a href="{% url 'institutions' %}" class="{% if request.resolver_match.url_name == 'institutions' %}active{% endif %}">INSTITUIÇÕES</a>
-        </div>
-        <main>
-            <div class="container">
-                <div class="content">
-                    {% block content %}
-                    {% endblock %}
-                </div>
+        <div class="wrapper">
+            <!-- Navigation Bar -->
+            <div class="topnav">
+                <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">TELA INICIAL</a>
+                <a href="{% url 'family_list' %}" class="{% if request.resolver_match.url_name == 'family_list' or request.resolver_match.url_name == 'family_detail' or request.resolver_match.url_name == 'family_create' or request.resolver_match.url_name == 'family_update' or request.resolver_match.url_name == 'family_delete' %}active{% endif %}">FAMÍLIAS</a>
+                <a href="{% url 'institution_list' %}" class="{% if request.resolver_match.url_name == 'institution_list' or request.resolver_match.url_name == 'institution_detail' or request.resolver_match.url_name == 'institution_create' or request.resolver_match.url_name == 'institution_update' or request.resolver_match.url_name == 'institution_delete' %}active{% endif %}">INSTITUIÇÕES</a>
+                <a href="{% url 'event_list' %}" class="{% if request.resolver_match.url_name == 'event_list' or request.resolver_match.url_name == 'event_detail' or request.resolver_match.url_name == 'event_create' or request.resolver_match.url_name == 'event_update' or request.resolver_match.url_name == 'event_delete' %}active{% endif %}">EVENTOS</a>
             </div>
-        </main>
+
+            <!-- Main Content -->
+            <main>
+                <div class="container">
+                    <div class="content">
+                        {% block content %}
+                        {% endblock %}
+                    </div>
+                </div>
+            </main>
+
+            <!-- Footer -->
+            <footer>
+                <div class="footer">
+                    <p>&copy; 2025 SolidariData. Todos os direitos reservados.</p>
+                </div>
+            </footer>
+        </div>
     </body>
+</html>

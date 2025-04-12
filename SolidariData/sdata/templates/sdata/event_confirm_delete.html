@@ -1,0 +1,15 @@
+{% extends "sdata/base.html" %}
+{% block content %}
+
+<h1>Remover Evento</h1>
+<p>Você tem certeza de que deseja remover o evento "{{ event.event_name }}"?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="button" class="btn-secondary" onclick="window.location.href='{% url 'event_list' %}'">
+        Cancelar
+    </button>
+    <button class="btn-danger" type="submit">Sim, remover</button>
+</form>
+
+{% endblock %}

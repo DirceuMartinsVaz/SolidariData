@@ -1,0 +1,58 @@
+{% extends "sdata/base.html" %}
+{% block content %}
+
+<h1>Representantes da Instituição: {{ institution.institution_name }}</h1>
+
+<!-- Add Representative Button -->
+<div class="form-actions">
+    <button type="button" class="btn-primary" onclick="window.location.href='{% url 'institution_representative_create' institution.pk %}'">
+        Adicionar Representante
+    </button>
+</div>
+
+<!-- Representatives Table -->
+<table>
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Gênero</th>
+            <th>Data de Nascimento</th>
+            <th>Telefone</th>
+            <th>Email</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for representative in representatives %}
+        <tr>
+            <td>{{ representative.institution_representative_name }}</td>
+            <td>{{ representative.institution_representative_gender }}</td>
+            <td>{{ representative.institution_representative_birthdate }}</td>
+            <td>{{ representative.institution_representative_phone }}</td>
+            <td>{{ representative.institution_representative_email }}</td>
+            <td>
+                <button type="button" class="btn-secondary" onclick="window.location.href='{% url 'institution_representative_update' institution.pk representative.pk %}'">
+                    Editar
+                </button>
+                <button type="button" class="btn-danger" onclick="window.location.href='{% url 'institution_representative_delete' institution.pk representative.pk %}'">
+                    Excluir
+                </button>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6" style="text-align: center;">Nenhum representante cadastrado.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Back Button -->
+
+<div class="form-actions">
+    <button type="button" class="btn-secondary" onclick="window.location.href='{% url 'institution_detail' institution.pk %}'">
+        Voltar para Detalhes da Instituição
+    </button>
+</div>
+
+{% endblock %}

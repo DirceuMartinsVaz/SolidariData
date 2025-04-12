@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Family Event Institutions</title>
+</head>
+<body>
+    <h1>Family Event Institutions</h1>
+    <a href="{% url 'family_event_institution_create' %}">Assign Institution to Family Event</a>
+    <ul>
+        {% for assignment in assignments %}
+            <li>
+                Family Event: {{ assignment.family_event }} <br>
+                Institution: {{ assignment.institution }} <br>
+                Assigned Date: {{ assignment.assigned_date }}
+            </li>
+        {% empty %}
+            <li>No assignments found.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

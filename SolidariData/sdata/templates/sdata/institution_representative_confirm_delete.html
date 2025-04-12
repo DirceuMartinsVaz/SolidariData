@@ -1,0 +1,15 @@
+{% extends "sdata/base.html" %}
+{% block content %}
+
+<h1>Remover Representante</h1>
+<p>Você tem certeza de que deseja remover o representante "{{ representative.institution_representative_name }}"?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn-danger">Sim, remover</button>
+    <button type="button" class="btn-secondary" onclick="window.location.href='{% url 'institution_representative_list' institution.pk %}'">
+        Cancelar
+    </button>
+</form>
+
+{% endblock %}

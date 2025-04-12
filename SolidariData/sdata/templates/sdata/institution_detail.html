@@ -1,0 +1,118 @@
+{% extends "sdata/base.html" %}
+{% block content %}
+
+<h1>Detalhes da Instituição</h1>
+
+<!-- Institution Details -->
+<fieldset>
+    <legend>Informações da Instituição</legend>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="institution_name">Nome:</label>
+            <input type="text" id="institution_name" name="institution_name" 
+                   value="{{ institution.institution_name }}" readonly class="form-control">
+        </div>
+        <div class="form-group-1">
+            <label for="institution_type">Tipo:</label>
+            <input type="text" id="institution_type" name="institution_type" 
+                   value="{{ institution.get_institution_type_display }}" readonly class="form-control">
+        </div>
+        <div class="form-group-1">
+            <label for="institution_cnpj">CNPJ:</label>
+            <input type="text" id="institution_cnpj" name="institution_cnpj" 
+                   value="{{ institution.institution_cnpj }}" readonly class="form-control">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group-2">
+            <label for="institution_address_street">Rua:</label>
+            <input type="text" id="institution_address_street" name="institution_address_street" 
+                   value="{{ institution.institution_address_street }}" readonly class="form-control">
+        </div>
+        <div class="form-group-1">
+            <label for="institution_address_number">Número:</label>
+            <input type="text" id="institution_address_number" name="institution_address_number" 
+                   value="{{ institution.institution_address_number }}" readonly class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="institution_address_neighborhood">Bairro:</label>
+            <input type="text" id="institution_address_neighborhood" name="institution_address_neighborhood" 
+                   value="{{ institution.institution_address_neighborhood }}" readonly class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="institution_address_city">Cidade:</label>
+            <input type="text" id="institution_address_city" name="institution_address_city" 
+                   value="{{ institution.institution_address_city }}" readonly class="form-control">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group-1">
+            <label for="institution_address_state">Estado:</label>
+            <input type="text" id="institution_address_state" name="institution_address_state" 
+                   value="{{ institution.get_institution_address_state_display }}" readonly class="form-control">
+        </div>
+        <div class="form-group-1">
+            <label for="institution_address_zipcode">CEP:</label>
+            <input type="text" id="institution_address_zipcode" name="institution_address_zipcode" 
+                   value="{{ institution.institution_address_zipcode }}" readonly class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="institution_address_complement">Complemento:</label>
+            <input type="text" id="institution_address_complement" name="institution_address_complement" 
+                   value="{{ institution.institution_address_complement }}" readonly class="form-control">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="institution_phone">Telefone:</label>
+            <input type="text" id="institution_phone" name="institution_phone" 
+                   value="{{ institution.institution_phone }}" readonly class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="institution_email">Email:</label>
+            <input type="text" id="institution_email" name="institution_email" 
+                   value="{{ institution.institution_email }}" readonly class="form-control">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="institution_website">Website:</label>
+            <input type="text" id="institution_website" name="institution_website" 
+                   value="{{ institution.institution_website }}" readonly class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="institution_social_media">Mídias Sociais:</label>
+            <input type="text" id="institution_social_media" name="institution_social_media" 
+                   value="{{ institution.institution_social_media }}" readonly class="form-control">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="institution_description">Descrição:</label>
+        <textarea id="institution_description" name="institution_description" readonly class="form-control">{{ institution.institution_description }}</textarea>
+    </div>
+    <div class="form-group">
+        <label for="institution_note">Notas:</label>
+        <textarea id="institution_note" name="institution_note" readonly class="form-control">{{ institution.institution_note }}</textarea>
+    </div>
+</fieldset>
+
+<!-- Form actions -->
+<div class="form-actions">
+    <div class="button">
+            <button type="button" class="btn-primary" onclick="window.location.href='{% url 'institution_representative_list' institution.pk %}'">
+                Ver Representantes
+            </button>
+        <button type="button" class="btn-secondary" onclick="window.location.href='{% url 'institution_list' %}'">
+            Voltar
+        </button>
+        <button type="button" class="btn-primary" onclick="window.location.href='{% url 'institution_update' institution.pk %}'">
+            Editar
+        </button>
+        <button type="button" class="btn-danger" onclick="window.location.href='{% url 'institution_delete' institution.pk %}'">
+            Excluir
+        </button>
+    </div>
+    
+</div>
+
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends "sdata/base.html" %}
+{% block content %}
+
+<h1>Lista de Eventos Cadastrados</h1>
+
+<!-- Functions bar-->
+<div class="list-view-functions">
+    <div>
+        <!-- Search Form -->
+        <form method="get">
+            <label for="search" style="align-self: flex-start;">Buscar por nome:</label>
+            <input type="text" name="search" id="search" value="{{ search_query }}" placeholder="Digite para buscar...">
+            <button type="submit" class="btn-primary">Buscar</button>
+            <input type="hidden" name="order_by" value="{{ order_by }}">
+            <input type="hidden" name="per_page" value="{{ per_page }}">
+        </form>
+    </div>
+    <div>
+        <!-- Clear search button -->
+        <form method="get">
+            <button type="submit" class="btn-secondary">Limpar busca</button>
+            <input type="hidden" name="order_by" value="{{ order_by }}">
+            <input type="hidden" name="per_page" value="{{ per_page }}">
+        </form>
+    </div>
+    <div>
+        <!-- Dropdown to choose order by field -->
+        <form method="get">
+            <label for="order_by">Ordenar por:</label>
+            <select name="order_by" id="order_by" onchange="this.form.submit()">
+                <option value="event_id" {% if order_by == 'event_id' %}selected{% endif %}>Código</option>
+                <option value="event_name" {% if order_by == 'event_name' %}selected{% endif %}>Nome</option>
+                <option value="event_date" {% if order_by == 'event_date' %}selected{% endif %}>Data</option>
+            </select>
+            <input type="hidden" name="search" value="{{ search_query }}">
+            <input type="hidden" name="per_page" value="{{ per_page }}">
+        </form>
+    </div>
+    <div>
+        <!-- Dropdown for selecting page size -->
+        <form method="get">
+            <label for="per_page">Eventos por página:</label>
+            <select name="per_page" id="per_page" onchange="this.form.submit()">
+                <option value="10" {% if per_page == '10' %}selected{% endif %}>10</option>
+                <option value="20" {% if per_page == '20' %}selected{% endif %}>20</option>
+                <option value="50" {% if per_page == '50' %}selected{% endif %}>50</option>
+            </select>
+            <input type="hidden" name="search" value="{{ search_query }}">
+            <input type="hidden" name="order_by" value="{{ order_by }}">
+        </form>
+    </div>
+    <div>
+        <button type="button" class="btn-primary" onclick="window.location.href='{% url 'event_create' %}'">
+            Cadastrar novo evento
+        </button>
+    </div>
+</div>
+
+<!-- Event list table -->
+<table>
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Nome</th>
+            <th>Data</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for event in page_obj %}
+        <tr>
+            <td>{{ event.event_id }}</td>
+            <td>{{ event.event_name }}</td>
+            <td>{{ event.event_date }}</td>
+            <td>
+                <button type="button" class="btn-secondary" onclick="window.location.href='{% url 'event_detail' event.pk %}'">
+                    Detalhar
+                </button>
+                <button type="button" class="btn-primary" onclick="window.location.href='{% url 'event_update' event.pk %}'">
+                    Editar
+                </button>
+                <button type="button" class="btn-danger" onclick="window.location.href='{% url 'event_delete' event.pk %}'">
+                    Excluir
+                </button>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4" style="text-align: center;">Nenhum evento encontrado.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Pagination controls -->
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+        <a href="?page=1&order_by={{ order_by }}&per_page={{ per_page }}&search={{ search_query }}">&laquo; Primeira</a>
+        <a href="?page={{ page_obj.previous_page_number }}&order_by={{ order_by }}&per_page={{ per_page }}&search={{ search_query }}">Anterior</a>
+        {% endif %}
+
+        <span>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}&order_by={{ order_by }}&per_page={{ per_page }}&search={{ search_query }}">Próxima</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}&order_by={{ order_by }}&per_page={{ per_page }}&search={{ search_query }}">Última &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+{% endblock %}

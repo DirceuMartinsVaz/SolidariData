@@ -1,0 +1,139 @@
+{% extends "sdata/base.html" %}
+{% block content %}
+
+<h1>{{ form.instance.pk|default:"Cadastro de evento" }}</h1>
+<form method="post" class="form-container">
+    {% csrf_token %}
+    
+    <!-- Event Form -->
+    <fieldset>
+        <legend>Detalhes do Evento</legend>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="event_name">Nome do Evento:</label>
+                {{ form.event_name }}
+                {% for error in form.event_name.errors %}
+                    <span style="color: red;">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div class="form-group-1">
+                <label for="event_date">Data do Evento:</label>
+                {{ form.event_date }}
+                {% for error in form.event_date.errors %}
+                    <span style="color: red;">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group-2">
+                <label for="event_location_street">Rua:</label>
+                {{ form.event_location_street }}
+                {% for error in form.event_location_street.errors %}
+                    <span style="color: red;">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div class="form-group-1">
+                <label for="event_location_number">Número:</label>
+                {{ form.event_location_number }}
+                {% for error in form.event_location_number.errors %}
+                    <span style="color: red;">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <label for="event_location_neighborhood">Bairro:</label>
+                {{ form.event_location_neighborhood }}
+                {% for error in form.event_location_neighborhood.errors %}
+                    <span style="color: red;">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <label for="event_location_city">Cidade:</label>
+                {{ form.event_location_city }}
+                {% for error in form.event_location_city.errors %}
+                    <span style="color: red;">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group-1">
+                <label for="event_location_state">Estado:</label>
+                {{ form.event_location_state }}
+                {% for error in form.event_location_state.errors %}
+                    <span style="color: red;">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div class="form-group-1">
+                <label for="event_location_zipcode">CEP:</label>
+                {{ form.event_location_zipcode }}
+                {% for error in form.event_location_zipcode.errors %}
+                    <span style="color: red;">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <label for="event_location_complement">Complemento:</label>
+                {{ form.event_location_complement }}
+                {% for error in form.event_location_complement.errors %}
+                    <span style="color: red;">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="event_institution">Instituição:</label>
+                {{ form.event_institution }}
+                {% for error in form.event_institution.errors %}
+                    <span style="color: red;">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="event_contact_person">Pessoa de Contato:</label>
+                {{ form.event_contact_person }}
+                {% for error in form.event_contact_person.errors %}
+                    <span style="color: red;">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <label for="event_contact_phone">Telefone de Contato:</label>
+                {{ form.event_contact_phone }}
+                {% for error in form.event_contact_phone.errors %}
+                    <span style="color: red;">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <label for="event_contact_email">Email de Contato:</label>
+                {{ form.event_contact_email }}
+                {% for error in form.event_contact_email.errors %}
+                    <span style="color: red;">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="event_description">Descrição:</label>
+                {{ form.event_description }}
+                {% for error in form.event_description.errors %}
+                    <span style="color: red;">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <label for="event_note">Notas:</label>
+                {{ form.event_note }}
+                {% for error in form.event_note.errors %}
+                    <span style="color: red;">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+    </fieldset>
+
+    <!-- Buttons -->
+    <div class="form-actions">
+        <div class="button">
+            <button type="button" class="btn-secondary" onclick="window.location.href='{% url 'event_list' %}'">Voltar</button>
+            <button type="submit" class="btn-primary">Gravar alterações</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}
