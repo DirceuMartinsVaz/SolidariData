@@ -100,72 +100,37 @@
                 {% endfor %}
             </div>
         </div>
-    </fieldset>
-
-    <!-- Institution Representatives Formset -->
-    <fieldset>
-        <legend>Representantes da Instituição</legend>
-        {{ representative_formset.management_form }}
-        <div id="representative-formset">
-            {% for form in representative_formset %}
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="{{ form.institution_representative_name.id_for_label }}">Nome:</label>
-                        {{ form.institution_representative_name }}
-                        {% for error in form.institution_representative_name.errors %}
-                            <span style="color: red;">{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                    <div class="form-group-1">
-                        <label for="{{ form.institution_representative_gender.id_for_label }}">Gênero:</label>
-                        {{ form.institution_representative_gender }}
-                        {% for error in form.institution_representative_gender.errors %}
-                            <span style="color: red;">{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                    <div class="form-group-1">
-                        <label for="{{ form.institution_representative_birthdate.id_for_label }}">Data de Nascimento:</label>
-                        {{ form.institution_representative_birthdate }}
-                        {% for error in form.institution_representative_birthdate.errors %}
-                            <span style="color: red;">{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="{{ form.institution_representative_phone.id_for_label }}">Telefone:</label>
-                        {{ form.institution_representative_phone }}
-                        {% for error in form.institution_representative_phone.errors %}
-                            <span style="color: red;">{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                    <div class="form-group">
-                        <label for="{{ form.institution_representative_email.id_for_label }}">Email:</label>
-                        {{ form.institution_representative_email }}
-                        {% for error in form.institution_representative_email.errors %}
-                            <span style="color: red;">{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="{{ form.institution_representative_note.id_for_label }}">Notas:</label>
-                        {{ form.institution_representative_note }}
-                        {% for error in form.institution_representative_note.errors %}
-                            <span style="color: red;">{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                    {% if form.instance.pk %}
-                        <div class="form-group">
-                            <label for="{{ form.DELETE.id_for_label }}">Remover:</label>
-                            {{ form.DELETE }}
-                        </div>
-                    {% endif %}
-                </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="institution_website">Website:</label>
+                {{ form.institution_website }}
+                {% for error in form.institution_website.errors %}
+                    <span style="color: red;">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <label for="institution_social_media">Mídias Sociais:</label>
+                {{ form.institution_social_media }}
+                {% for error in form.institution_social_media.errors %}
+                    <span style="color: red;">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="institution_description">Descrição:</label>
+            {{ form.institution_description }}
+            {% for error in form.institution_description.errors %}
+                <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            <label for="institution_note">Notas:</label>
+            {{ form.institution_note }}
+            {% for error in form.institution_note.errors %}
+                <span style="color: red;">{{ error }}</span>
             {% endfor %}
         </div>
     </fieldset>
-
     <!-- Buttons -->
     <div class="form-actions">
         <button type="submit" class="btn-primary">Salvar</button>

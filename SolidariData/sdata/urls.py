@@ -17,6 +17,7 @@ urlpatterns = [
     path('sdata/events/create/', views.event_create, name='event_create'),
     path('sdata/events/<int:pk>/update/', views.event_update, name='event_update'),
     path('sdata/events/<int:pk>/delete/', views.event_delete, name='event_delete'),
+    path('sdata/events/<int:event_pk>/toggle-institution/<int:institution_pk>/', views.toggle_institution_signup, name='toggle_institution_signup'),
 
     # Institution URLs
     path('sdata/institutions/', views.institution_list, name='institution_list'),

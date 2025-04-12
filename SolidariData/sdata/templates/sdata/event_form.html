@@ -7,7 +7,7 @@
     
     <!-- Event Form -->
     <fieldset>
-        <legend>Detalhes do Evento</legend>
+        <legend>Informações do Evento</legend>
         <div class="form-row">
             <div class="form-group">
                 <label for="event_name">Nome do Evento:</label>
@@ -79,7 +79,7 @@
         </div>
         <div class="form-row">
             <div class="form-group">
-                <label for="event_institution">Instituição:</label>
+                <label for="event_institution">Instituição Responsável pelo Evento:</label>
                 {{ form.event_institution }}
                 {% for error in form.event_institution.errors %}
                     <span style="color: red;">{{ error }}</span>
@@ -127,6 +127,43 @@
         </div>
     </fieldset>
 
+    <!-- Institution Signup Section -->
+    <fieldset>
+        <legend>Inscrever Instituições</legend>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Tipo</th>
+                    <th>Descrição</th>
+                    <th>Inscrição</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for institution in institutions %}
+                <tr>
+                    <td>{{ institution.institution_id }}</td>
+                    <td>{{ institution.institution_name }}</td>
+                    <td>{{ institution.get_institution_type_display }}</td>
+                    <td>{{ institution.institution_description|default_if_none:"Sem descrição" }}</td>
+                    <td>
+                        <label class="switch">
+                            <input type="checkbox" name="signed_up_institutions" value="{{ institution.pk }}" 
+                                   {% if institution.pk in signed_up_institutions %}checked{% endif %}>
+                            <span class="slider round"></span>
+                        </label>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center;">Nenhuma instituição disponível.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </fieldset>
+
     <!-- Buttons -->
     <div class="form-actions">
         <div class="button">
@@ -135,5 +172,24 @@
         </div>
     </div>
 </form>
+
+<script>
+    document.querySelectorAll('.switch input[type="checkbox"]').forEach(function(toggle) {
+        toggle.addEventListener('change', function() {
+            const eventId = this.dataset.eventId;
+            const institutionId = this.dataset.institutionId;
+            const url = `/sdata/events/${eventId}/toggle-institution/${institutionId}/`;
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+            })
+            .then(response => response.json())
+            .catch(error => console.error('Erro:', error));
+        });
+    });
+</script>
 
 {% endblock %}

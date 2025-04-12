@@ -7,7 +7,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "SolidariData.settings")
 django.setup()
 
 # Import models
-from sdata.models import Family, Relative, Event, Institution, InstitutionEvent, FamilyEvent, FamilyEventInstitution
+from sdata.models import Family, Relative, Event, Institution, InstitutionEvent, FamilyEvent, FamilyEventInstitution, InstitutionRepresentative
 
 # Sample data
 names = [
@@ -66,7 +66,7 @@ def seed_data(num_families=50, num_institutions=20, num_events=30):
             )
             relative.save()
 
-    # Seed Institutions
+    # Seed Institutions and Representatives
     for _ in range(num_institutions):
         institution = Institution(
             institution_name=f"Instituição {random.choice(names)}",
@@ -85,6 +85,26 @@ def seed_data(num_families=50, num_institutions=20, num_events=30):
             institution_note="Nota de exemplo."
         )
         institution.save()
+
+        # Create representatives (1 to 3 representatives per institution)
+        for _ in range(random.randint(1, 3)):
+            representative = InstitutionRepresentative(
+                institution_representative_name=f"{random.choice(names)} {random.choice(surnames)}",
+                institution_representative_gender=random.choice(genders),
+                institution_representative_birthdate=random_date(1970, 2000),
+                institution_representative_id_number=f"{random.randint(100, 999)}.{random.randint(100, 999)}.{random.randint(100, 999)}-{random.randint(10, 99)}",
+                institution_representative_address_street=f"Rua {random.choice(names)}",
+                institution_representative_address_number=str(random.randint(1, 1500)),
+                institution_representative_address_neighborhood="Bairro Aleatório",
+                institution_representative_address_city=random.choice(["São Paulo", "Rio de Janeiro", "Belo Horizonte", "Porto Alegre", "Salvador"]),
+                institution_representative_address_state=random.choice(states),
+                institution_representative_address_zipcode=f"{random.randint(10000, 99999)}-{random.randint(100, 999)}",
+                institution_representative_phone=f"{random.randint(10, 99)}{random.randint(90000, 99999)}-{random.randint(1000, 9999)}",
+                institution_representative_email=f"{random.choice(names).lower()}@representante.com",
+                institution_representative_note="Representante gerado automaticamente.",
+                institution_representative_institution=institution
+            )
+            representative.save()
 
     # Seed Events
     for _ in range(num_events):

@@ -2,6 +2,7 @@ from django.core.paginator import Paginator
 #from django.db.models import Q  # For complex queries
 #from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
+from django.http import JsonResponse
 from .models import Family, Event, Institution, InstitutionEvent, FamilyEvent, FamilyEventInstitution, InstitutionRepresentative
 from .forms import FamilyForm, RelativeFormSet, EventForm, InstitutionForm, InstitutionEventForm, FamilyEventForm, FamilyEventInstitutionForm, InstitutionRepresentativeFormSet, InstitutionRepresentativeForm
 import unicodedata # For accent removal
@@ -126,17 +127,40 @@ def event_list(request):
 
 def event_detail(request, pk):
     event = get_object_or_404(Event, pk=pk)
-    return render(request, 'sdata/event_detail.html', {'event': event})
+    signed_up_institutions = Institution.objects.filter(
+        institution_events__institution_event_event=event
+    )
+    return render(request, 'sdata/event_detail.html', {
+        'event': event,
+        'signed_up_institutions': signed_up_institutions,
+    })
 
 def event_create(request):
     if request.method == "POST":
         form = EventForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('event_list')
+            event = form.save()
+            
+            # Handle institution signups
+            signed_up_institutions = request.POST.getlist('signed_up_institutions')  # Get the list of institution IDs
+            for institution_id in signed_up_institutions:
+                institution = Institution.objects.get(pk=institution_id)
+                InstitutionEvent.objects.create(
+                    institution_event_event=event,
+                    institution_event_institution=institution
+                )
+            
+            # Redirect to the event_detail page of the newly created event
+            return redirect('event_detail', pk=event.pk)
     else:
         form = EventForm()
-    return render(request, 'sdata/event_form.html', {'form': form})
+    institutions = Institution.objects.all()
+    signed_up_institutions = []
+    return render(request, 'sdata/event_form.html', {
+        'form': form,
+        'institutions': institutions,
+        'signed_up_institutions': signed_up_institutions,
+    })
 
 def event_update(request, pk):
     event = get_object_or_404(Event, pk=pk)
@@ -144,10 +168,32 @@ def event_update(request, pk):
         form = EventForm(request.POST, instance=event)
         if form.is_valid():
             form.save()
+
+            # Handle institution signups
+            signed_up_institutions = request.POST.getlist('signed_up_institutions')  # Get the list of institution IDs
+            # Remove existing InstitutionEvent entries for this event
+            InstitutionEvent.objects.filter(institution_event_event=event).delete()
+            # Add new InstitutionEvent entries for the selected institutions
+            for institution_id in signed_up_institutions:
+                institution = Institution.objects.get(pk=institution_id)
+                InstitutionEvent.objects.create(
+                    institution_event_event=event,
+                    institution_event_institution=institution
+                )
+
+            # Redirect to the event_detail page after updating
             return redirect('event_detail', pk=event.pk)
     else:
         form = EventForm(instance=event)
-    return render(request, 'sdata/event_form.html', {'form': form})
+    institutions = Institution.objects.all()
+    signed_up_institutions = InstitutionEvent.objects.filter(
+        institution_event_event=event
+    ).values_list('institution_event_institution_id', flat=True)
+    return render(request, 'sdata/event_form.html', {
+        'form': form,
+        'institutions': institutions,
+        'signed_up_institutions': signed_up_institutions,
+    })
 
 def event_delete(request, pk):
     event = get_object_or_404(Event, pk=pk)
@@ -155,6 +201,24 @@ def event_delete(request, pk):
         event.delete()
         return redirect('event_list')
     return render(request, 'sdata/event_confirm_delete.html', {'event': event})
+
+def toggle_institution_signup(request, event_pk, institution_pk):
+    event = get_object_or_404(Event, pk=event_pk)
+    institution = get_object_or_404(Institution, pk=institution_pk)
+
+    # Check if the institution is already signed up for the event
+    institution_event, created = InstitutionEvent.objects.get_or_create(
+        institution_event_event=event,
+        institution_event_institution=institution
+    )
+
+    if not created:
+        # If it already exists, remove it (toggle off)
+        institution_event.delete()
+        return JsonResponse({'status': 'removed'})
+    else:
+        # If it was created, keep it (toggle on)
+        return JsonResponse({'status': 'added'})
 
 
 ### Institution views ###
@@ -189,38 +253,28 @@ def institution_detail(request, pk):
 def institution_create(request):
     if request.method == "POST":
         institution_form = InstitutionForm(request.POST)
-        representative_formset = InstitutionRepresentativeFormSet(request.POST)
-        if institution_form.is_valid() and representative_formset.is_valid():
+        if institution_form.is_valid():
             institution = institution_form.save()
-            representatives = representative_formset.save(commit=False)
-            for representative in representatives:
-                representative.institution_representative_institution = institution
-                representative.save()
             # Redirect to the institution_detail page of the newly created institution
             return redirect('institution_detail', pk=institution.pk)
     else:
         institution_form = InstitutionForm()
-        representative_formset = InstitutionRepresentativeFormSet()
     return render(request, 'sdata/institution_form.html', {
         'form': institution_form,
-        'representative_formset': representative_formset,
     })
 
 def institution_update(request, pk):
     institution = get_object_or_404(Institution, pk=pk)
     if request.method == "POST":
         institution_form = InstitutionForm(request.POST, instance=institution)
-        representative_formset = InstitutionRepresentativeFormSet(request.POST, instance=institution)
-        if institution_form.is_valid() and representative_formset.is_valid():
+        if institution_form.is_valid():
             institution_form.save()
-            representative_formset.save()
+            # Redirect to the institution_detail page after updating
             return redirect('institution_detail', pk=institution.pk)
     else:
         institution_form = InstitutionForm(instance=institution)
-        representative_formset = InstitutionRepresentativeFormSet(instance=institution)
     return render(request, 'sdata/institution_form.html', {
         'form': institution_form,
-        'representative_formset': representative_formset,
     })
 
 def institution_delete(request, pk):

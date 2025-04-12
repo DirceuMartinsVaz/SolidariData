@@ -26,7 +26,7 @@
         </div>
     </div>
     <div class="form-row">
-        <div class="form-group-2">
+        <div class="form-group">
             <label for="event_location_street">Rua:</label>
             <input type="text" id="event_location_street" name="event_location_street" 
                    value="{{ event.event_location_street }}" readonly class="form-control">
@@ -64,7 +64,7 @@
                    value="{{ event.event_location_complement }}" readonly class="form-control">
         </div>
     </div>
-<div class="form-row">
+    <div class="form-row">
         <div class="form-group">
             <label for="event_contact_person">Pessoa de Contato:</label>
             <input type="text" id="event_contact_person" name="event_contact_person" 
@@ -89,6 +89,35 @@
         <label for="event_note">Notas:</label>
         <textarea id="event_note" name="event_note" readonly class="form-control">{{ event.event_note }}</textarea>
     </div>
+</fieldset>
+
+<!-- Signed-Up Institutions -->
+<fieldset>
+    <legend>Instituições Inscritas</legend>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Tipo</th>
+                <th>Descrição</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for institution in signed_up_institutions %}
+            <tr>
+                <td>{{ institution.institution_id }}</td>
+                <td>{{ institution.institution_name }}</td>
+                <td>{{ institution.get_institution_type_display }}</td>
+                <td>{{ institution.institution_description|default_if_none:"Sem descrição" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" style="text-align: center;">Nenhuma instituição inscrita.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </fieldset>
 
 <!-- Form actions -->
