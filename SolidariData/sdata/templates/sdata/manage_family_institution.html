@@ -1,0 +1,159 @@
+{% extends "sdata/base.html" %}
+{% block content %}
+
+<h1>Gerenciar Famílias por Instituição: {{ event.event_name }}</h1>
+
+<!-- Families with an institution -->
+<fieldset>
+    <legend>Famílias com Instituição</legend>
+    <form id="unassign-form" method="post">
+        {% csrf_token %}
+        <table id="families_with_institution_table">
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" id="select_all_with_institution" onclick="toggleSelectAll(this, 'with-institution-checkbox')">
+                        Selecionar Todos
+                    </th>
+                    <th>Nome da Família</th>
+                    <th>Instituição</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for assignment in families_with_institution %}
+                <tr>
+                    <td><input type="checkbox" name="selected_families" value="{{ assignment.family_event.pk }}" class="with-institution-checkbox"></td>
+                    <td>{{ assignment.family_event.family_event_family.family_representative_name }}</td>
+                    <td>{{ assignment.institution.institution_name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="button" class="btn-secondary" onclick="unassignInstitution()">Remover Instituição</button>
+    </form>
+</fieldset>
+
+<!-- Families without an institution -->
+<fieldset>
+    <legend>Famílias sem Instituição</legend>
+    <form id="assign-form" method="post">
+        {% csrf_token %}
+        <select id="institution_select" name="selected_institution">
+            <option value="">Selecione uma Instituição</option>
+            {% for institution in institutions %}
+            <option value="{{ institution.pk }}">{{ institution.institution_name }}</option>
+            {% endfor %}
+        </select>
+        <table id="families_without_institution_table">
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" id="select_all_without_institution" onclick="toggleSelectAll(this, 'without-institution-checkbox')">
+                        Selecionar Todos
+                    </th>
+                    <th>Nome da Família</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for family_event in families_without_institution %}
+                <tr>
+                    <td><input type="checkbox" name="selected_families" value="{{ family_event.pk }}" class="without-institution-checkbox"></td>
+                    <td>{{ family_event.family_event_family.family_representative_name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="button" class="btn-primary" onclick="assignInstitution()">Atribuir Instituição</button>
+    </form>
+</fieldset>
+
+<!-- Back to list button -->
+<div class="form-actions">
+    <button type="button" class="btn-secondary" onclick="window.location.href='{% url 'event_family_list' event.pk %}'">
+        Voltar para Lista
+    </button>
+</div>
+
+<script>
+    function toggleSelectAll(selectAllCheckbox, checkboxClass) {
+        const checkboxes = document.querySelectorAll(`.${checkboxClass}`);
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = selectAllCheckbox.checked;
+        });
+    }
+
+    function assignInstitution() {
+        const form = document.getElementById("assign-form");
+        const formData = new FormData(form);
+        formData.append('action', 'assign');
+
+        fetch("{% url 'manage_family_institution' event.pk %}", {
+            method: "POST",
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                updateTables(data.families_with_institution, data.families_without_institution);
+            } else {
+                alert("Erro ao atribuir instituição.");
+            }
+        })
+        .catch(error => console.error('Erro:', error));
+    }
+
+    function unassignInstitution() {
+        const form = document.getElementById("unassign-form");
+        const formData = new FormData(form);
+        formData.append('action', 'unassign');
+
+        fetch("{% url 'manage_family_institution' event.pk %}", {
+            method: "POST",
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                updateTables(data.families_with_institution, data.families_without_institution);
+            } else {
+                alert("Erro ao remover instituição.");
+            }
+        })
+        .catch(error => console.error('Erro:', error));
+    }
+
+    function updateTables(familiesWithInstitution, familiesWithoutInstitution) {
+        const withInstitutionTableBody = document.querySelector("#families_with_institution_table tbody");
+        const withoutInstitutionTableBody = document.querySelector("#families_without_institution_table tbody");
+
+        withInstitutionTableBody.innerHTML = "";
+        withoutInstitutionTableBody.innerHTML = "";
+
+        familiesWithInstitution.forEach(family => {
+            withInstitutionTableBody.innerHTML += `
+                <tr>
+                    <td><input type="checkbox" name="selected_families" value="${family.family_event__pk}" class="with-institution-checkbox"></td>
+                    <td>${family.family_event__family_event_family__family_representative_name}</td>
+                    <td>${family.institution__institution_name}</td>
+                </tr>
+            `;
+        });
+
+        familiesWithoutInstitution.forEach(family => {
+            withoutInstitutionTableBody.innerHTML += `
+                <tr>
+                    <td><input type="checkbox" name="selected_families" value="${family.pk}" class="without-institution-checkbox"></td>
+                    <td>${family.family_event_family__family_representative_name}</td>
+                </tr>
+            `;
+        });
+    }
+</script>
+
+{% endblock %}

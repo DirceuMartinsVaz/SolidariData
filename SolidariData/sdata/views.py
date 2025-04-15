@@ -293,6 +293,52 @@ def manage_served_status(request, event_pk):
         'families_in_event': families_in_event,
     })
 
+def manage_family_institution(request, event_pk):
+    event = get_object_or_404(Event, pk=event_pk)
+    families_with_institution = FamilyEventInstitution.objects.filter(family_event__family_event_event=event)
+    families_without_institution = FamilyEvent.objects.filter(family_event_event=event).exclude(
+        pk__in=families_with_institution.values_list('family_event', flat=True)
+    )
+    # Filter institutions associated with the event
+    institutions = Institution.objects.filter(institution_events__institution_event_event=event)
+
+    if request.method == "POST":
+        action = request.POST.get('action')
+        selected_families = request.POST.getlist('selected_families')
+
+        if action == "assign":
+            institution_id = request.POST.get('selected_institution')
+            institution = get_object_or_404(Institution, pk=institution_id)
+            for family_event_id in selected_families:
+                family_event = FamilyEvent.objects.get(pk=family_event_id)
+                FamilyEventInstitution.objects.create(family_event=family_event, institution=institution)
+        elif action == "unassign":
+            FamilyEventInstitution.objects.filter(family_event__pk__in=selected_families).delete()
+
+        # Return updated data
+        families_with_institution = FamilyEventInstitution.objects.filter(family_event__family_event_event=event)
+        families_without_institution = FamilyEvent.objects.filter(family_event_event=event).exclude(
+            pk__in=families_with_institution.values_list('family_event', flat=True)
+        )
+
+        return JsonResponse({
+            'status': 'success',
+            'families_with_institution': list(families_with_institution.values(
+                'family_event__pk', 'family_event__family_event_family__family_representative_name',
+                'institution__institution_name'
+            )),
+            'families_without_institution': list(families_without_institution.values(
+                'pk', 'family_event_family__family_representative_name'
+            )),
+        })
+
+    return render(request, 'sdata/manage_family_institution.html', {
+        'event': event,
+        'families_with_institution': families_with_institution,
+        'families_without_institution': families_without_institution,
+        'institutions': institutions,
+    })
+
 
 ### Institution views ###
 def institution_list(request):
