@@ -18,6 +18,10 @@ urlpatterns = [
     path('sdata/events/<int:pk>/update/', views.event_update, name='event_update'),
     path('sdata/events/<int:pk>/delete/', views.event_delete, name='event_delete'),
     path('sdata/events/<int:event_pk>/toggle-institution/<int:institution_pk>/', views.toggle_institution_signup, name='toggle_institution_signup'),
+    path('sdata/events/<int:event_pk>/families/', views.event_family_list, name='event_family_list'),
+    path('sdata/events/<int:event_pk>/manage-families/', views.manage_event_families, name='manage_event_families'),
+    path('sdata/events/<int:event_pk>/toggle-family-served/<int:family_pk>/', views.toggle_family_served, name='toggle_family_served'),
+    path('events/<int:event_pk>/manage-served-status/', views.manage_served_status, name='manage_served_status'),
 
     # Institution URLs
     path('sdata/institutions/', views.institution_list, name='institution_list'),

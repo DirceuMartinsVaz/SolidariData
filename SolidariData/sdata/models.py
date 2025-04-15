@@ -145,6 +145,7 @@ class FamilyEvent(models.Model):
     family_event_family = models.ForeignKey(Family, on_delete=models.CASCADE, related_name="family_events", db_index=True)
     family_event_event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="family_events", db_index=True)
     family_event_registration_date = models.DateTimeField(auto_now_add=True)
+    served = models.BooleanField(default=False)  # Field to track if the family was served
 
     def __str__(self):
         return f"{self.family_event_family} - {self.family_event_event}"
@@ -153,6 +154,8 @@ class FamilyEventInstitution(models.Model):
     family_event = models.OneToOneField(FamilyEvent, on_delete=models.CASCADE, related_name="institution_assignment", db_index=True)
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE, related_name="assigned_family_events", db_index=True)
     assigned_date = models.DateTimeField(auto_now_add=True)
+    served = models.BooleanField(default=False) 
+
 
     def clean(self):
         if not self.family_event:

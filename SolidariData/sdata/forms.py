@@ -163,6 +163,7 @@ class FamilyEventForm(forms.ModelForm):
             'family_event_family': 'Família',
             'family_event_event': 'Evento',
             'family_event_registration_date': 'Data de Registro',
+            'served': 'Atendido',
         }
         widgets = {
             'family_event_registration_date': forms.DateInput(attrs={'readonly': 'readonly'}),

@@ -1,5 +1,5 @@
 from django.core.paginator import Paginator
-#from django.db.models import Q  # For complex queries
+from django.db.models import Q
 #from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
@@ -220,6 +220,79 @@ def toggle_institution_signup(request, event_pk, institution_pk):
         # If it was created, keep it (toggle on)
         return JsonResponse({'status': 'added'})
 
+def event_family_list(request, event_pk):
+    event = get_object_or_404(Event, pk=event_pk)
+    families_in_event = FamilyEvent.objects.filter(family_event_event=event)
+
+    return render(request, 'sdata/event_family_list.html', {
+        'event': event,
+        'families_in_event': families_in_event,
+    })
+
+def manage_event_families(request, event_pk):
+    event = get_object_or_404(Event, pk=event_pk)
+    families_in_event = Family.objects.filter(family_events__family_event_event=event)
+    all_families = Family.objects.exclude(pk__in=families_in_event)
+
+    if request.method == "POST":
+        action = request.POST.get('action')
+        selected_families = request.POST.getlist('selected_families')
+
+        if action == "add":
+            for family_id in selected_families:
+                family = Family.objects.get(pk=family_id)
+                FamilyEvent.objects.create(family_event_family=family, family_event_event=event)
+        elif action == "remove":
+            FamilyEvent.objects.filter(family_event_event=event, family_event_family__pk__in=selected_families).delete()
+
+        # Return updated family lists
+        families_in_event = list(Family.objects.filter(family_events__family_event_event=event).values(
+            'pk', 'family_id', 'family_representative_name', 'family_phone', 'family_address_street', 'family_address_number', 'family_address_city'
+        ))
+        all_families = list(Family.objects.exclude(pk__in=[f['pk'] for f in families_in_event]).values(
+            'pk', 'family_id', 'family_representative_name', 'family_phone', 'family_address_street', 'family_address_number', 'family_address_city'
+        ))
+
+        return JsonResponse({'status': 'success', 'families_in_event': families_in_event, 'all_families': all_families})
+
+    return render(request, 'sdata/manage_event_families.html', {
+        'event': event,
+        'families_in_event': families_in_event,
+        'all_families': all_families,
+    })
+
+def manage_served_status(request, event_pk):
+    event = get_object_or_404(Event, pk=event_pk)
+    families_in_event = FamilyEvent.objects.filter(family_event_event=event)
+
+    if request.method == "POST":
+        action = request.POST.get('action')
+        selected_families = request.POST.getlist('selected_families')
+
+        if action == "mark_served":
+            FamilyEvent.objects.filter(pk__in=selected_families).update(served=True)
+        elif action == "mark_unserved":
+            FamilyEvent.objects.filter(pk__in=selected_families).update(served=False)
+
+        # Return updated family lists as JSON
+        served_families = list(FamilyEvent.objects.filter(family_event_event=event, served=True).values(
+            'pk', 'family_event_family__family_id', 'family_event_family__family_representative_name',
+            'family_event_family__family_phone', 'family_event_family__family_address_street',
+            'family_event_family__family_address_number', 'family_event_family__family_address_city'
+        ))
+        unserved_families = list(FamilyEvent.objects.filter(family_event_event=event, served=False).values(
+            'pk', 'family_event_family__family_id', 'family_event_family__family_representative_name',
+            'family_event_family__family_phone', 'family_event_family__family_address_street',
+            'family_event_family__family_address_number', 'family_event_family__family_address_city'
+        ))
+
+        return JsonResponse({'status': 'success', 'served_families': served_families, 'unserved_families': unserved_families})
+
+    return render(request, 'sdata/manage_served_status.html', {
+        'event': event,
+        'families_in_event': families_in_event,
+    })
+
 
 ### Institution views ###
 def institution_list(request):
@@ -387,6 +460,14 @@ def family_event_delete(request, pk):
         family_event.delete()
         return redirect('family_event_list')
     return render(request, 'sdata/family_event_confirm_delete.html', {'family_event': family_event})
+
+def toggle_family_served(request, event_pk, family_pk):
+    if request.method == "POST":
+        family_event = get_object_or_404(FamilyEvent, family_event_event_id=event_pk, family_event_family_id=family_pk)
+        family_event.served = not family_event.served
+        family_event.save()
+        return JsonResponse({'status': 'served' if family_event.served else 'not_served'})
+    return JsonResponse({'status': 'error'}, status=400)
 
 
 ### Family Event Institution views ###

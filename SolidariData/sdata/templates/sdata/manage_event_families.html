@@ -1,0 +1,204 @@
+{% extends "sdata/base.html" %}
+{% block content %}
+
+<h1>Gerenciar Famílias no Evento: {{ event.event_name }}</h1>
+
+<!-- Families in the event -->
+<fieldset>
+    <legend>Famílias no Evento</legend>
+    <form id="remove-families-form">
+        {% csrf_token %}
+        <table id="families_in_event_table">
+            <thead>
+                <tr>
+                    <th>Selecionar</th>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Telefone</th>
+                    <th>Endereço</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for family in families_in_event %}
+                <tr>
+                    <td><input type="checkbox" name="selected_families" value="{{ family.pk }}"></td>
+                    <td>{{ family.family_id }}</td>
+                    <td>{{ family.family_representative_name }}</td>
+                    <td>{{ family.family_phone }}</td>
+                    <td>{{ family.family_address_street }}, {{ family.family_address_number }} - {{ family.family_address_city }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center;">Nenhuma família associada a este evento.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="button" class="btn-danger" onclick="removeFamilies()">Remover Selecionadas</button>
+    </form>
+</fieldset>
+
+<!-- Families not in the event -->
+<fieldset>
+    <legend>Adicionar Famílias ao Evento</legend>
+    <form id="add-families-form">
+        {% csrf_token %}
+        <input type="text" id="family_filter" placeholder="Filtrar famílias..." onkeyup="filterFamilies()">
+        <table id="family_table">
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" id="select_all" onclick="toggleSelectAll(this)">
+                        Selecionar Todos
+                    </th>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Telefone</th>
+                    <th>Endereço</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for family in all_families %}
+                <tr>
+                    <td><input type="checkbox" name="selected_families" value="{{ family.pk }}" class="family-checkbox"></td>
+                    <td>{{ family.family_id }}</td>
+                    <td>{{ family.family_representative_name }}</td>
+                    <td>{{ family.family_phone }}</td>
+                    <td>{{ family.family_address_street }}, {{ family.family_address_number }} - {{ family.family_address_city }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center;">Nenhuma família disponível para adicionar.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="button" class="btn-primary" onclick="addFamilies()">Adicionar Selecionadas</button>
+    </form>
+</fieldset>
+
+<!-- Back to list button -->
+<div class="form-actions">
+    <button type="button" class="btn-secondary" onclick="window.location.href='{% url 'event_family_list' event.pk %}'">
+        Voltar para Lista
+    </button>
+</div>
+
+<script>
+    function filterFamilies() {
+        const filter = document.getElementById("family_filter").value.toLowerCase();
+        const rows = document.querySelectorAll("#family_table tbody tr");
+
+        rows.forEach(row => {
+            const name = row.cells[2].textContent.toLowerCase();
+            row.style.display = name.includes(filter) ? "" : "none";
+        });
+    }
+
+    function toggleSelectAll(selectAllCheckbox) {
+        const checkboxes = document.querySelectorAll(".family-checkbox");
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = selectAllCheckbox.checked;
+        });
+    }
+
+    function addFamilies() {
+        const form = document.getElementById("add-families-form");
+        const formData = new FormData(form);
+        formData.append('action', 'add');
+
+        fetch("{% url 'manage_event_families' event.pk %}", {
+            method: "POST",
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                updateFamiliesInEventTable(data.families_in_event);
+                updateAvailableFamiliesTable(data.all_families);
+            } else {
+                alert("Erro ao adicionar famílias.");
+            }
+        })
+        .catch(error => console.error('Erro:', error));
+    }
+
+    function removeFamilies() {
+        const form = document.getElementById("remove-families-form");
+        const formData = new FormData(form);
+        formData.append('action', 'remove');
+
+        fetch("{% url 'manage_event_families' event.pk %}", {
+            method: "POST",
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                updateFamiliesInEventTable(data.families_in_event);
+                updateAvailableFamiliesTable(data.all_families);
+            } else {
+                alert("Erro ao remover famílias.");
+            }
+        })
+        .catch(error => console.error('Erro:', error));
+    }
+
+    function updateFamiliesInEventTable(families) {
+        const tableBody = document.querySelector("#families_in_event_table tbody");
+        tableBody.innerHTML = ""; // Clear the table
+
+        if (families.length === 0) {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="5" style="text-align: center;">Nenhuma família associada a este evento.</td>
+                </tr>
+            `;
+        } else {
+            families.forEach(family => {
+                tableBody.innerHTML += `
+                    <tr>
+                        <td><input type="checkbox" name="selected_families" value="${family.pk}"></td>
+                        <td>${family.family_id}</td>
+                        <td>${family.family_representative_name}</td>
+                        <td>${family.family_phone}</td>
+                        <td>${family.family_address_street}, ${family.family_address_number} - ${family.family_address_city}</td>
+                    </tr>
+                `;
+            });
+        }
+    }
+
+    function updateAvailableFamiliesTable(families) {
+        const tableBody = document.querySelector("#family_table tbody");
+        tableBody.innerHTML = ""; // Clear the table
+
+        if (families.length === 0) {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="5" style="text-align: center;">Nenhuma família disponível para adicionar.</td>
+                </tr>
+            `;
+        } else {
+            families.forEach(family => {
+                tableBody.innerHTML += `
+                    <tr>
+                        <td><input type="checkbox" name="selected_families" value="${family.pk}" class="family-checkbox"></td>
+                        <td>${family.family_id}</td>
+                        <td>${family.family_representative_name}</td>
+                        <td>${family.family_phone}</td>
+                        <td>${family.family_address_street}, ${family.family_address_number} - ${family.family_address_city}</td>
+                    </tr>
+                `;
+            });
+        }
+    }
+</script>
+
+{% endblock %}

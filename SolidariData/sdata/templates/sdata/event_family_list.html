@@ -1,0 +1,50 @@
+{% extends "sdata/base.html" %}
+{% block content %}
+
+<h1>Famílias no Evento: {{ event.event_name }}</h1>
+
+<!-- Table of families in the event -->
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Telefone</th>
+            <th>Endereço</th>
+            <th>Atendido</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for family_event in families_in_event %}
+        <tr>
+            <td>{{ family_event.family_event_family.family_id }}</td>
+            <td>{{ family_event.family_event_family.family_representative_name }}</td>
+            <td>{{ family_event.family_event_family.family_phone }}</td>
+            <td>{{ family_event.family_event_family.family_address_street }}, {{ family_event.family_event_family.family_address_number }} - {{ family_event.family_event_family.family_address_city }}</td>
+            <td>
+                {% if family_event.served %}
+                    Sim
+                {% else %}
+                    Não
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5" style="text-align: center;">Nenhuma família associada a este evento.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Buttons to manage families and served status -->
+<div class="form-actions">
+    <button type="button" class="btn-primary" onclick="window.location.href='{% url 'manage_event_families' event.pk %}'">
+        Gerenciar Famílias no Evento
+    </button>
+    <button type="button" class="btn-secondary" onclick="window.location.href='{% url 'manage_served_status' event.pk %}'">
+        Gerenciar Status de Atendimento
+    </button>
+</div>
+
+{% endblock %}

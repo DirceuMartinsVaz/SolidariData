@@ -75,6 +75,9 @@
             <td>{{ event.event_date }}</td>
             <td>{{ event.event_description }}</td>
             <td>
+                <button type="button" class="btn-primary" onclick="window.location.href='{% url 'event_family_list' event.pk %}'">
+                    Ver Famílias no Evento
+                </button>
                 <button type="button" class="btn-secondary" onclick="window.location.href='{% url 'event_detail' event.pk %}'">
                     Detalhar
                 </button>
