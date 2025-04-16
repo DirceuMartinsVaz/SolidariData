@@ -171,8 +171,8 @@ th, td {
   padding: 10px;
   text-align: left;
   border-bottom: 1px solid #ddd;
-  margin: 0px;
-  width: min-content;
+  margin: 0px 10px;
+  width: auto;
 }
 th {
   background-color: #6c63ff;
@@ -180,28 +180,9 @@ th {
   color: white;
 }
 
-/* Set minimum width for the "Código" column */
-th:first-child, td:first-child { /* Select the first column */
-  width: 80px; /* Adjust the width as necessary */
-  text-align: center;
-}
-
-th:nth-child(2), td:nth-child(2) { /* Select the first column */
-  margin-right:auto;
-  width:max-content;
-}
-
-/* Set minimum width for the "Ações" column */
-th:last-child, td:last-child { /* Select the last column */
-  width: 250px; /* Adjust the width as necessary */
-  
-}
 
 td {
-  
-  
   padding: 0px 10px;
-
 }
 
 tbody > tr:nth-of-type(even) {
@@ -303,4 +284,20 @@ input:checked + .slider {
 
 input:checked + .slider:before {
     transform: translateX(14px);
+}
+
+/* Header Container */
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px; /* Optional: Adds spacing below the header */
+}
+
+.header-container h1 {
+    margin: 0; /* Removes default margin for better alignment */
+}
+
+.header-container .btn-primary {
+    margin-left: 20px; /* Optional: Adds spacing between the button and the title */
 }

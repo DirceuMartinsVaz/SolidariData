@@ -1,10 +1,8 @@
 {% extends "sdata/base.html" %}
 {% block content %}
 
-<h1>Representantes da Instituição: {{ institution.institution_name }}</h1>
-
-<!-- Add Representative Button -->
-<div class="form-actions">
+<div class="header-container">
+    <h1>Representantes da Instituição: {{ institution.institution_name }}</h1>
     <button type="button" class="btn-primary" onclick="window.location.href='{% url 'institution_representative_create' institution.pk %}'">
         Adicionar Representante
     </button>
@@ -31,7 +29,7 @@
             <td>{{ representative.institution_representative_phone }}</td>
             <td>{{ representative.institution_representative_email }}</td>
             <td>
-                <button type="button" class="btn-secondary" onclick="window.location.href='{% url 'institution_representative_update' institution.pk representative.pk %}'">
+                <button type="button" class="btn-primary" onclick="window.location.href='{% url 'institution_representative_update' institution.pk representative.pk %}'">
                     Editar
                 </button>
                 <button type="button" class="btn-danger" onclick="window.location.href='{% url 'institution_representative_delete' institution.pk representative.pk %}'">

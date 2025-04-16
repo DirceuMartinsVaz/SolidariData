@@ -106,9 +106,9 @@
         <tbody>
             {% for institution in signed_up_institutions %}
             <tr>
-                <td>{{ institution.institution_id }}</td>
-                <td>{{ institution.institution_name }}</td>
-                <td>{{ institution.get_institution_type_display }}</td>
+                <td style="width: 20px">{{ institution.institution_id }}</td>
+                <td style="width: 20%">{{ institution.institution_name }}</td>
+                <td style="width: 10%">{{ institution.get_institution_type_display }}</td>
                 <td>{{ institution.institution_description|default_if_none:"Sem descrição" }}</td>
             </tr>
             {% empty %}
