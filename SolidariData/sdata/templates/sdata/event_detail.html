@@ -123,6 +123,9 @@
 <!-- Form actions -->
 <div class="form-actions">
     <div class="button">
+        <button type="button" class="btn-secondary" onclick="window.location.href='{% url 'event_family_list' event.pk %}'">
+            Ver Famílias no Evento
+        </button>
         <button type="button" class="btn-secondary" onclick="window.location.href='{% url 'event_list' %}'">
             Voltar
         </button>
@@ -135,11 +138,6 @@
     </div>
 </div>
 
-<!-- Button to navigate to the family list for the event -->
-<div class="form-actions">
-    <button type="button" class="btn-primary" onclick="window.location.href='{% url 'event_family_list' event.pk %}'">
-        Ver Famílias no Evento
-    </button>
-</div>
+
 
 {% endblock %}

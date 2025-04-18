@@ -39,13 +39,16 @@
 
 <!-- Buttons to manage families, served status, and institution assignments -->
 <div class="form-actions">
+    <button type="button" class="btn-secondary" onclick="window.location.href='{% url 'event_detail' event.pk %}'">
+        Voltar para Detalhes do Evento
+    </button>
     <button type="button" class="btn-primary" onclick="window.location.href='{% url 'manage_event_families' event.pk %}'">
         Gerenciar Famílias no Evento
     </button>
-    <button type="button" class="btn-secondary" onclick="window.location.href='{% url 'manage_served_status' event.pk %}'">
+    <button type="button" class="btn-primary" onclick="window.location.href='{% url 'manage_served_status' event.pk %}'">
         Gerenciar Status de Atendimento
     </button>
-    <button type="button" class="btn-secondary" onclick="window.location.href='{% url 'manage_family_institution' event.pk %}'">
+    <button type="button" class="btn-primary" onclick="window.location.href='{% url 'manage_family_institution' event.pk %}'">
         Gerenciar Famílias por Instituição
     </button>
 </div>
